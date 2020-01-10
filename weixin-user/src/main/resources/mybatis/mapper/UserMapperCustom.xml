@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.UserMapper">
+
+    <select id="getUserCollectList" parameterType="java.lang.Integer" resultType="collectVo">
+		SELECT
+			c.commodityId,
+			c.shopId,
+			c.price,
+			s.shopName,
+			s.shopLogo
+		FROM
+			m_commodity c
+			INNER JOIN m_shop s ON c.shopId = s.shopId 
+		WHERE
+			c.CommodityId IN ( SELECT cid FROM m_user_commodity WHERE uid = #{_parameter} )
+	</select>
+
+    <select id="getProdImgs" parameterType="collectVo" resultType="java.lang.String">
+		SELECT
+			imgUrl 
+		FROM
+			m_commodityimage 
+		WHERE
+			ImgType = 1 AND
+			CommodityId = #{commodityId}
+	</select>
+
+    <select id="getShopImgs" parameterType="collectVo" resultType="java.lang.String">
+		SELECT
+			imgUrl 
+		FROM
+			m_shopimage
+		WHERE
+			ImgType = 1 AND
+			shopId = #{shopId}
+	</select>
+
+    <insert id="saveFeedBack" parameterType="com.mmm.weixin.vo.Feedback">
+		INSERT INTO m_feedback ( UserId, Contents, ContactInfo, ImgUrl, AppendTime, LastTime )
+		VALUES
+			( #{userId}, #{contents}, #{contactinfo}, #{imgurl}, now(), now() )
+	</insert>
+
+    <insert id="saveComment" parameterType="com.mmm.weixin.vo.Comments">
+		INSERT INTO m_comments ( UserId, Contents, ImgUrl, ShopId, OrderId, AppendTime )
+		VALUES
+			( #{userId}, #{contents}, #{imgurl}, #{shopid}, #{orderid}, now() )
+	</insert>
+
+    <select id="getShopIdByOrderId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT
+			shopId
+		FROM
+			m_orderform
+		WHERE
+			OrderFormId = #{_parameter}
+	</select>
+
+	<select id="getOrderDate" resultType="orderFormFieldValue">
+		SELECT
+		*
+		FROM
+		m_orderformfieldvalue
+		<where>
+			OrderFormId = #{orderFormId}
+			and FieldId = #{fieldId}
+		</where>
+	</select>
+
+	<select id="getShopNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT
+			shopName
+		FROM
+			m_shop
+		WHERE
+			shopId = #{_parameter}
+	</select>
+
+	<select id="getShopLogoById" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT
+			shopLogo
+		FROM
+			m_shop
+		WHERE
+			shopId = #{_parameter}
+	</select>
+
+	<insert id="saveMessageInfo" parameterType="java.util.Map">
+		INSERT INTO m_message ( messageType, contents, userId, smsPhone, lastTime )
+		VALUES
+			( #{messageType}, #{contents}, #{userId}, #{smsPhone}, now())
+	</insert>
+
+	<select id="getPhoneCodeByIdPhone" resultType="java.lang.String">
+	  	SELECT
+			contents
+		FROM
+			m_message
+		WHERE
+			userId = #{userId}
+			AND smsPhone = #{smsPhone}
+		ORDER BY
+			messageId DESC
+			LIMIT 1
+	</select>
+	
+	<update id="updatePhoneNum">
+		UPDATE m_user
+		SET phone = #{phoneNum}
+		WHERE
+			userId = #{userId}
+	</update>
+
+	<select id="getUserInfo" parameterType="java.lang.Integer" resultType="user">
+		SELECT
+			*
+		FROM
+			m_user
+		WHERE
+			userId = #{_parameter}
+	</select>
+	
+	<update id="saveUserInfo" parameterType="user">
+		UPDATE m_user
+		SET
+		<trim suffixOverrides=",">
+
+		<if test="nickName != null and nickName != ''">
+		nickName = #{nickName},
+		</if>
+
+		<if test="headUrl != null and headUrl != ''">
+			headUrl = #{headUrl},
+		</if>
+
+		<if test="sex != null">
+			Sex = #{sex},
+		</if>
+
+		</trim>
+		WHERE
+			userId = #{userId}
+	</update>
+	
+	<select id="getAboutUs" resultType="java.lang.String">
+		SELECT
+			contents
+		FROM
+			m_singlepage
+		WHERE
+			title LIKE '%关于我们%'
+	</select>
+</mapper>

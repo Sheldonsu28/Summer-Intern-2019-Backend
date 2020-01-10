@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.TeamMemberMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.TeamMember">
+    <id column="MemberId" jdbcType="INTEGER" property="memberId" />
+    <result column="NickName" jdbcType="VARCHAR" property="nickName" />
+    <result column="TeamId" jdbcType="INTEGER" property="teamId" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+    <result column="MemberLevel" jdbcType="INTEGER" property="memberLevel" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_teammember
+    where MemberId = #{memberId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.TeamMember" useGeneratedKeys="true" keyProperty="memberId">
+    insert into m_teammember (MemberId, NickName, TeamId, 
+      AppendTime, MemberLevel)
+    values (#{memberId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER}, 
+      #{appendTime,jdbcType=TIMESTAMP}, #{memberLevel,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.TeamMember">
+    update m_teammember
+    set NickName = #{nickName,jdbcType=VARCHAR},
+      TeamId = #{teamId,jdbcType=INTEGER},
+      AppendTime = #{appendTime,jdbcType=TIMESTAMP},
+      MemberLevel = #{memberLevel,jdbcType=INTEGER}
+    where MemberId = #{memberId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select MemberId, NickName, TeamId, AppendTime, MemberLevel
+    from m_teammember
+    where MemberId = #{memberId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select MemberId, NickName, TeamId, AppendTime, MemberLevel
+    from m_teammember
+  </select>
+  <sql id="Base_Column">
+  	MemberId, NickName, TeamId, AppendTime, MemberLevel
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.TeamMemberParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_teammember
+  	<where>
+  		<if test="name != null and name != ''">
+  			and NickName = #{name}
+  		</if>
+  		<if test="teamId != null and teamId != 0">
+  			and TeamId = #{teamId}
+  		</if>
+  	</where>
+  </select>
+</mapper>

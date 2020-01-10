@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormMapper">
+
+    <select id="findUserOrderList" parameterType="orderFormCustom" resultType="orderFormCustom">
+        SELECT
+        o.*,
+        s.ShopName,
+        s.shopLogo
+        FROM
+        m_orderform o
+        INNER JOIN m_shop s ON o.shopId = s.shopId
+        <where>
+            userId = #{userId} and o.IsDelete = 0 and orderFormType = #{orderFormType}
+            <if test="stateCode != null and stateCode != -2">
+                and o.StateCode = #{stateCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="getOrderExtraValue" resultType="orderFormFieldValue">
+        SELECT
+        *
+        FROM
+        m_orderformfieldvalue
+        <where>
+            OrderFormId = #{orderFormId}
+            and FieldId = #{fieldId}
+        </where>
+    </select>
+
+    <select id="getShopImgs" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT
+			imgUrl
+		FROM
+			m_shopimage
+		WHERE
+			ImgType = 1 AND
+			shopId = #{_parameter}
+	</select>
+
+    <select id="getOrderInfoById" resultType="detailVo">
+        SELECT
+            o.*,
+            s.shopName,
+            s.shopLogo,
+            s.addressInfo,
+            s.shopTel
+        FROM
+            m_orderform o
+            INNER JOIN m_shop s ON o.ShopId = s.ShopId
+        WHERE
+            OrderFormId = #{_parameter}
+    </select>
+
+    <update id="cancelOrderById" parameterType="java.lang.Integer">
+        UPDATE m_orderform
+        SET StateCode = 0
+        WHERE
+            OrderFormId = #{_parameter}
+    </update>
+
+    <update id="deleteOrderById" parameterType="java.lang.Integer">
+        UPDATE m_orderform
+        SET IsDelete = 1
+        WHERE
+            orderFormId = #{_parameter}
+    </update>
+
+    <update id="updateOrderState">
+        UPDATE m_orderform
+        SET StateCode = #{stateCode}, ActualPayAmount = #{totalFee}
+        WHERE
+            orderFormId = #{orderFormId}
+    </update>
+
+    <select id="getPayResult" parameterType="com.mmm.weixin.dto.param.OrderDto" resultType="java.lang.Integer">
+        SELECT
+            StateCode
+        FROM
+            m_orderform
+        WHERE
+            OrderFormId = #{orderId}
+    </select>
+
+    <select id="selectIdByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            OrderFormId
+        FROM
+            m_orderform
+        WHERE
+            OrderFormCode = #{_parameter}
+    </select>
+    
+    <select id="getCommodityPriceByOrderId" parameterType="java.lang.Integer" resultType="java.math.BigDecimal">
+        SELECT
+            sellPrice
+        FROM
+            m_orderformitems
+        WHERE
+            orderFormId = #{_parameter}
+    </select>
+
+    <select id="getStateCodeByOrderId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+            StateCode
+        FROM
+            m_orderform
+        WHERE
+            OrderFormId = #{_parameter}
+    </select>
+</mapper>

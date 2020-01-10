@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.TripCommodityMapper">
+
+    <select id="findTripPackageList" parameterType="java.lang.String"  resultType="com.mmm.weixin.vo.tripvo.FindTripPackageListVo">
+        SELECT
+            c.*,
+            s.shopName,
+            s.shopLogo
+        FROM
+            m_commodity c
+            INNER JOIN m_shop s ON c.shopId = s.shopId
+        WHERE
+            c.shopId IN ( SELECT shopId FROM m_shop WHERE areaId = (SELECT areaId FROM m_areadata WHERE areaName = #{_parameter}) )
+            AND c.typeCode = 2
+    </select>
+
+    <select id="getProdImgs" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT
+			imgUrl
+		FROM
+			m_commodityimage
+		WHERE
+			ImgType = 1 AND
+			CommodityId = #{commodityId}
+	</select>
+
+    <select id="getCommodityImgs" resultType="java.lang.String">
+        SELECT
+        imgUrl
+        FROM
+        m_commodityimage
+        WHERE
+        ImgType = #{imgType} AND
+        CommodityId = #{commodityId}
+    </select>
+
+    <select id="getPackageDetailById"  parameterType="com.mmm.weixin.dto.tripdto.GetPackageDetailDto" resultType="com.mmm.weixin.vo.tripvo.GetPackageDetailVo">
+        SELECT
+            c.*,
+            s.shopName,
+            s.shopLogo
+        FROM
+            m_commodity c
+            INNER JOIN m_shop s ON c.shopId = s.shopId
+        WHERE
+            c.commodityId = #{commodityId}
+    </select>
+
+    <select id="findAdInfoList" parameterType="com.mmm.weixin.dto.tripdto.FindAdInfoDto" resultType="com.mmm.weixin.vo.AdInfo">
+        SELECT
+            *
+        FROM
+            m_adinfo
+        <where>
+            <if test="showLocation != null">
+                AND showLocation = #{showLocation}
+            </if>
+        </where>
+        ORDER BY
+            AppendTime DESC
+            LIMIT #{showNum}
+    </select>
+    
+    <select id="findSingleTripList" parameterType="java.lang.String" resultType="com.mmm.weixin.vo.tripvo.SingleTripListVo">
+        SELECT
+            *
+        FROM
+            m_commodity
+        WHERE
+            typeCode = 3
+        <if test="_parameter != null and _parameter != ''">
+            AND commodityName LIKE CONCAT( '%', #{_parameter}, '%' )
+        </if>
+        ORDER BY
+            appendTime DESC
+    </select>
+    
+    <select id="getSingleTripDetail" parameterType="java.lang.Integer" resultType="com.mmm.weixin.vo.tripvo.SingleTripListVo">
+        SELECT
+            *
+        FROM
+            m_commodity
+        WHERE
+            commodityId = #{_parameter}
+    </select>
+</mapper>

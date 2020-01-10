@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.HolidayMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Holiday">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="holiday" jdbcType="VARCHAR" property="holiday" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_holiday
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Holiday">
+    insert into m_holiday (id, holiday)
+    values (#{id,jdbcType=INTEGER}, #{holiday,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Holiday">
+    update m_holiday
+    set holiday = #{holiday,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, holiday
+    from m_holiday
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, holiday
+    from m_holiday
+  </select>
+  <select id="selectByHoliday" parameterType="com.mmm.weixin.vo.Holiday" resultMap="BaseResultMap">
+  	select * from m_holiday where holiday = #{holiday}
+  </select>
+</mapper>

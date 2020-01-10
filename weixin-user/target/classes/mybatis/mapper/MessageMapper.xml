@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Message">
+    <id column="MessageId" jdbcType="INTEGER" property="messageid" />
+    <result column="MessageType" jdbcType="INTEGER" property="messagetype" />
+    <result column="Contents" jdbcType="VARCHAR" property="contents" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendtime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lasttime" />
+    <result column="IsRead" jdbcType="BIT" property="isread" />
+    <result column="IsSms" jdbcType="BIT" property="issms" />
+    <result column="SmsPhone" jdbcType="VARCHAR" property="smsphone" />
+    <result column="SmsSendResult" jdbcType="VARCHAR" property="smssendresult" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_message
+    where MessageId = #{messageid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Message">
+    insert into m_message (MessageId, MessageType, Contents, 
+      UserId, AppendTime, LastTime, 
+      IsRead, IsSms, SmsPhone, SmsSendResult
+      )
+    values (#{messageid,jdbcType=INTEGER}, #{messagetype,jdbcType=INTEGER}, #{contents,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{appendtime,jdbcType=TIMESTAMP}, #{lasttime,jdbcType=TIMESTAMP},
+      #{isread,jdbcType=BIT}, #{issms,jdbcType=BIT}, #{smsphone,jdbcType=VARCHAR}, #{smssendresult,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Message">
+    update m_message
+    set MessageType = #{messagetype,jdbcType=INTEGER},
+      Contents = #{contents,jdbcType=VARCHAR},
+      UserId = #{userId,jdbcType=INTEGER},
+      AppendTime = #{appendtime,jdbcType=TIMESTAMP},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      IsRead = #{isread,jdbcType=BIT},
+      IsSms = #{issms,jdbcType=BIT},
+      SmsPhone = #{smsphone,jdbcType=VARCHAR},
+      SmsSendResult = #{smssendresult,jdbcType=VARCHAR}
+    where MessageId = #{messageid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select MessageId, MessageType, Contents, UserId, AppendTime, LastTime, IsRead, IsSms, 
+    SmsPhone, SmsSendResult
+    from m_message
+    where MessageId = #{messageid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select MessageId, MessageType, Contents, UserId, AppendTime, LastTime, IsRead, IsSms, 
+    SmsPhone, SmsSendResult
+    from m_message
+  </select>
+</mapper>

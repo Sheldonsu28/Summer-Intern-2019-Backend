@@ -1,0 +1,44 @@
+spring: 
+  redis:
+    database: 0
+    host: 172.81.252.137
+    port: 6379
+    password: hRWVgVlsFJwP0lN3
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+    timeout: 0
+    
+hystrix_error: 服务不可用,请稍后再试
+inner_error: 内部错误
+jwt_expire_milli: 2592000000
+#jwt_expire_milli: 6000
+secret_key: e5f2b25fd050677718ebd476122ff3a7
+shop_service: seller
+user_service: user
+commodity_service: commodity
+order_service: order
+
+#微信信息
+weixin_secret: 965dd00fcaa0e29cfe0b15ba1d46b39b
+weixin_appid: wx4d763be60811ee7d
+weixin_access_token_url: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${weixin_appid}&secret=${weixin_secret}
+#获取微信小程序码
+weixin_code_url: https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={0}
+
+#七牛信息
+qiniu_server_ip_address: https://img.cywl168.cn/
+qiniu_access_key: tyiHgP7-1OKruPG0flK1SXrJSFZsArkdWy5OlD0e
+qiniu_secret_key: mtqRefGDo7gdWoT3ua86gsKuctPgZTcpBYfXDPei
+#七牛存储空间名称
+qiniu_bucket_name: ticketing_img
+
+golf_tool_wxapp_page: pages/Eventdetalis/main
+appointment_wxapp_page: pages/ballDetails/main
+
+#腾讯短信
+qq_sms_appkey: b6f0ebe53b942a6efd2894fd0f2362a9
+qq_smsSign: 程誉网络科技
+qq_sms_appid: 1400198484

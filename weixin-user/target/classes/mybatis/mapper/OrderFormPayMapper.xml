@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormPayMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.OrderFormPay">
+    <id column="PayId" jdbcType="INTEGER" property="payid" />
+    <result column="OrderFormId" jdbcType="INTEGER" property="orderformid" />
+    <result column="PayCode" jdbcType="VARCHAR" property="paycode" />
+    <result column="PayAmount" jdbcType="INTEGER" property="payamount" />
+    <result column="PayMethod" jdbcType="INTEGER" property="paymethod" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendtime" />
+    <result column="PayTime" jdbcType="TIMESTAMP" property="paytime" />
+    <result column="PayCertificate" jdbcType="VARCHAR" property="paycertificate" />
+    <result column="PaySerialNumber" jdbcType="VARCHAR" property="payserialnumber" />
+    <result column="PayStateCode" jdbcType="INTEGER" property="paystatecode" />
+    <result column="PayRemark" jdbcType="VARCHAR" property="payremark" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_orderformpay
+    where PayId = #{payid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.OrderFormPay">
+    insert into m_orderformpay (PayId, OrderFormId, PayCode, 
+      PayAmount, PayMethod, AppendTime, 
+      PayTime, PayCertificate, PaySerialNumber, 
+      PayStateCode, PayRemark)
+    values (#{payid,jdbcType=INTEGER}, #{orderformid,jdbcType=INTEGER}, #{paycode,jdbcType=VARCHAR}, 
+      #{payamount,jdbcType=INTEGER}, #{paymethod,jdbcType=INTEGER}, #{appendtime,jdbcType=TIMESTAMP}, 
+      #{paytime,jdbcType=TIMESTAMP}, #{paycertificate,jdbcType=VARCHAR}, #{payserialnumber,jdbcType=VARCHAR}, 
+      #{paystatecode,jdbcType=INTEGER}, #{payremark,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.OrderFormPay">
+    update m_orderformpay
+    set OrderFormId = #{orderformid,jdbcType=INTEGER},
+      PayCode = #{paycode,jdbcType=VARCHAR},
+      PayAmount = #{payamount,jdbcType=INTEGER},
+      PayMethod = #{paymethod,jdbcType=INTEGER},
+      AppendTime = #{appendtime,jdbcType=TIMESTAMP},
+      PayTime = #{paytime,jdbcType=TIMESTAMP},
+      PayCertificate = #{paycertificate,jdbcType=VARCHAR},
+      PaySerialNumber = #{payserialnumber,jdbcType=VARCHAR},
+      PayStateCode = #{paystatecode,jdbcType=INTEGER},
+      PayRemark = #{payremark,jdbcType=VARCHAR}
+    where PayId = #{payid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select PayId, OrderFormId, PayCode, PayAmount, PayMethod, AppendTime, PayTime, PayCertificate, 
+    PaySerialNumber, PayStateCode, PayRemark
+    from m_orderformpay
+    where PayId = #{payid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select PayId, OrderFormId, PayCode, PayAmount, PayMethod, AppendTime, PayTime, PayCertificate, 
+    PaySerialNumber, PayStateCode, PayRemark
+    from m_orderformpay
+  </select>
+</mapper>

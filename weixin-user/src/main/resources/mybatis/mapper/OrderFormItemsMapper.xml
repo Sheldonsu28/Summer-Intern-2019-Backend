@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormItemsMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.OrderFormItems">
+    <id column="ItemId" jdbcType="INTEGER" property="itemid" />
+    <result column="OrderFormId" jdbcType="INTEGER" property="orderformid" />
+    <result column="SellPrice" jdbcType="DECIMAL" property="sellprice" />
+    <result column="ActualSellPrice" jdbcType="DECIMAL" property="actualsellprice" />
+    <result column="SellCount" jdbcType="INTEGER" property="sellcount" />
+    <result column="TotalAmount" jdbcType="DECIMAL" property="totalamount" />
+    <result column="SKUId" jdbcType="INTEGER" property="skuid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_orderformitems
+    where ItemId = #{itemid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.OrderFormItems">
+    insert into m_orderformitems (ItemId, OrderFormId, SellPrice, 
+      ActualSellPrice, SellCount, TotalAmount, 
+      SKUId)
+    values (#{itemid,jdbcType=INTEGER}, #{orderformid,jdbcType=INTEGER}, #{sellprice,jdbcType=DECIMAL}, 
+      #{actualsellprice,jdbcType=DECIMAL}, #{sellcount,jdbcType=INTEGER}, #{totalamount,jdbcType=DECIMAL}, 
+      #{skuid,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.OrderFormItems">
+    update m_orderformitems
+    set OrderFormId = #{orderformid,jdbcType=INTEGER},
+      SellPrice = #{sellprice,jdbcType=DECIMAL},
+      ActualSellPrice = #{actualsellprice,jdbcType=DECIMAL},
+      SellCount = #{sellcount,jdbcType=INTEGER},
+      TotalAmount = #{totalamount,jdbcType=DECIMAL},
+      SKUId = #{skuid,jdbcType=INTEGER}
+    where ItemId = #{itemid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ItemId, OrderFormId, SellPrice, ActualSellPrice, SellCount, TotalAmount, SKUId
+    from m_orderformitems
+    where ItemId = #{itemid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ItemId, OrderFormId, SellPrice, ActualSellPrice, SellCount, TotalAmount, SKUId
+    from m_orderformitems
+  </select>
+</mapper>

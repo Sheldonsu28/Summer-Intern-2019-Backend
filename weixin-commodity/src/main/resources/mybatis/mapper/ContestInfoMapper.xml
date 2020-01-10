@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ContestInfoMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.ContestInfo">
+    <id column="ContestId" jdbcType="INTEGER" property="contestId" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="Address" jdbcType="VARCHAR" property="address" />
+    <result column="AreaId" jdbcType="INTEGER" property="areaId" />
+    <result column="ContestBeginTime" jdbcType="TIMESTAMP" property="contestBeginTime" />
+    <result column="ContestEndTime" jdbcType="TIMESTAMP" property="contestEndTime" />
+    <result column="SignUpEndTime" jdbcType="TIMESTAMP" property="signUpEndTime" />
+    <result column="Price" jdbcType="DECIMAL" property="price" />
+    <result column="SpecialPrice" jdbcType="DECIMAL" property="specialPrice" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="PropertyCode" jdbcType="INTEGER" property="propertyCode" />
+    <result column="ImgUrl" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="StateCode" jdbcType="BIT" property="stateCode" />
+    <result column="DepositAmount" jdbcType="DECIMAL" property="depositAmount" />
+    <result column="Contents" jdbcType="LONGVARCHAR" property="contents" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_contestinfo
+    where ContestId = #{contestId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.ContestInfo">
+    insert into m_contestinfo (ContestId, Title, Address, 
+      AreaId, ContestBeginTime, ContestEndTime, 
+      SignUpEndTime, Price, SpecialPrice, 
+      AppendTime, LastTime, ShopId, 
+      PropertyCode, ImgUrl, StateCode, 
+      DepositAmount, Contents)
+    values (#{contestId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{areaId,jdbcType=INTEGER}, #{contestBeginTime,jdbcType=TIMESTAMP}, #{contestEndTime,jdbcType=TIMESTAMP}, 
+      #{signUpEndTime,jdbcType=TIMESTAMP}, #{price,jdbcType=DECIMAL}, #{specialPrice,jdbcType=DECIMAL}, 
+      #{appendTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
+      #{propertyCode,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{stateCode,jdbcType=BIT}, 
+      #{depositAmount,jdbcType=DECIMAL}, #{contents,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.ContestInfo">
+    update m_contestinfo
+    set Title = #{title,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      AreaId = #{areaId,jdbcType=INTEGER},
+      ContestBeginTime = #{contestBeginTime,jdbcType=TIMESTAMP},
+      ContestEndTime = #{contestEndTime,jdbcType=TIMESTAMP},
+      SignUpEndTime = #{signUpEndTime,jdbcType=TIMESTAMP},
+      Price = #{price,jdbcType=DECIMAL},
+      SpecialPrice = #{specialPrice,jdbcType=DECIMAL},
+      AppendTime = #{appendTime,jdbcType=TIMESTAMP},
+      LastTime = #{lastTime,jdbcType=TIMESTAMP},
+      ShopId = #{shopId,jdbcType=INTEGER},
+      PropertyCode = #{propertyCode,jdbcType=INTEGER},
+      ImgUrl = #{imgUrl,jdbcType=VARCHAR},
+      StateCode = #{stateCode,jdbcType=BIT},
+      DepositAmount = #{depositAmount,jdbcType=DECIMAL},
+      Contents = #{contents,jdbcType=LONGVARCHAR}
+    where ContestId = #{contestId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ContestId, Title, Address, AreaId, ContestBeginTime, ContestEndTime, SignUpEndTime, 
+    Price, SpecialPrice, AppendTime, LastTime, ShopId, PropertyCode, ImgUrl, StateCode, 
+    DepositAmount, Contents
+    from m_contestinfo
+    where ContestId = #{contestId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ContestId, Title, Address, AreaId, ContestBeginTime, ContestEndTime, SignUpEndTime, 
+    Price, SpecialPrice, AppendTime, LastTime, ShopId, PropertyCode, ImgUrl, StateCode, 
+    DepositAmount, Contents
+    from m_contestinfo
+  </select>
+  <sql id="Base_Column">
+  	ContestId, Title, Address, AreaId, ContestBeginTime, ContestEndTime, SignUpEndTime, 
+    Price, SpecialPrice, AppendTime, LastTime, ShopId, PropertyCode, ImgUrl, StateCode, 
+    Contents
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.ContestInfoParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column" />
+  	from m_contestinfo
+  	<where>
+  		StateCode = true and ContestEndTime>NOW() 
+  		<if test="propertyCode != null">
+  			and PropertyCode = #{propertyCode}
+  		</if>
+  		<if test="areaId != null and areaId != 0">
+  			and AreaId = #{areaId}
+  		</if>
+  	</where>
+  	order by ContestBeginTime
+  </select>
+
+</mapper>

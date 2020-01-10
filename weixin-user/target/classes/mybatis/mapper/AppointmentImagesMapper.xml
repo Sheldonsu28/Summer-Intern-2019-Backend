@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AppointmentImagesMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AppointmentImages">
+    <id column="AiId" jdbcType="INTEGER" property="aiId" />
+    <result column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="ImageUrl" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="IsMain" jdbcType="BIT" property="isMain" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <sql id="Base_Column">
+  	AiId, Aid, ImageUrl, IsMain, Created, Updated
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_appointment_images
+    where AiId = #{aiId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AppointmentImages">
+    insert into m_appointment_images (AiId, Aid, ImageUrl, 
+      IsMain, Created, Updated
+      )
+    values (#{aiId,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{isMain,jdbcType=BIT}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AppointmentImages">
+    update m_appointment_images
+    set Aid = #{aid,jdbcType=INTEGER},
+      ImageUrl = #{imageUrl,jdbcType=VARCHAR},
+      IsMain = #{isMain,jdbcType=BIT},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where AiId = #{aiId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select AiId, Aid, ImageUrl, IsMain, Created, Updated
+    from m_appointment_images
+    where AiId = #{aiId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select AiId, Aid, ImageUrl, IsMain, Created, Updated
+    from m_appointment_images
+  </select>
+  <insert id="insertByList" parameterType="java.util.List">
+  	insert into m_appointment_images
+  	(Aid,ImageUrl,IsMain,Created)
+  	values
+  	<foreach collection="list" item="item" index="index" separator=",">
+  		(
+  			#{item.aid},
+  			#{item.imageUrl},
+  			#{item.isMain},
+  			#{item.created}
+  		)
+  	</foreach>
+  </insert>
+  <select id="selectByAid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		select <include refid="Base_Column"/>
+  		from m_appointment_images where Aid = #{aid}
+  </select>
+</mapper>

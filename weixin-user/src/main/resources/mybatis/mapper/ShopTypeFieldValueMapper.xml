@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ShopTypeFieldValueMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.ShopTypeFieldValue">
+    <id column="ValueId" jdbcType="INTEGER" property="valueid" />
+    <result column="FieldId" jdbcType="INTEGER" property="fieldid" />
+    <result column="ValueText" jdbcType="VARCHAR" property="valuetext" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_shoptypefieldvalue
+    where ValueId = #{valueid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.ShopTypeFieldValue">
+    insert into m_shoptypefieldvalue (ValueId, FieldId, ValueText, 
+      ShopId)
+    values (#{valueid,jdbcType=INTEGER}, #{fieldid,jdbcType=INTEGER}, #{valuetext,jdbcType=VARCHAR}, 
+      #{shopid,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.ShopTypeFieldValue">
+    update m_shoptypefieldvalue
+    set FieldId = #{fieldid,jdbcType=INTEGER},
+      ValueText = #{valuetext,jdbcType=VARCHAR},
+      ShopId = #{shopid,jdbcType=INTEGER}
+    where ValueId = #{valueid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ValueId, FieldId, ValueText, ShopId
+    from m_shoptypefieldvalue
+    where ValueId = #{valueid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ValueId, FieldId, ValueText, ShopId
+    from m_shoptypefieldvalue
+  </select>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.User">
+    <id column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="NickName" jdbcType="VARCHAR" property="nickName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="HeadUrl" jdbcType="VARCHAR" property="headUrl" />
+    <result column="RegisterTime" jdbcType="TIMESTAMP" property="registerTime" />
+    <result column="LastLoginTime" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="Sex" jdbcType="INTEGER" property="sex" />
+    <result column="Birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="AddressInfo" jdbcType="VARCHAR" property="addressInfo" />
+    <result column="stateCode" jdbcType="INTEGER" property="stateCode" />
+    <result column="OpenId" jdbcType="VARCHAR" property="openId" />
+    <result column="Tags" jdbcType="VARCHAR" property="tags" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_user
+    where UserId = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyProperty="userId" parameterType="com.mmm.weixin.vo.User" useGeneratedKeys="true">
+    insert into m_user (UserId, NickName, Phone, 
+      HeadUrl, RegisterTime, LastLoginTime, 
+      Sex, Birthday, AddressInfo, 
+      stateCode, OpenId, Tags
+      )
+    values (#{userId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{headUrl,jdbcType=VARCHAR}, #{registerTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=VARCHAR}, #{addressInfo,jdbcType=VARCHAR}, 
+      #{stateCode,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.User">
+    update m_user
+    set NickName = #{nickName,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      HeadUrl = #{headUrl,jdbcType=VARCHAR},
+      RegisterTime = #{registerTime,jdbcType=TIMESTAMP},
+      LastLoginTime = #{lastLoginTime,jdbcType=TIMESTAMP},
+      Sex = #{sex,jdbcType=INTEGER},
+      Birthday = #{birthday,jdbcType=VARCHAR},
+      AddressInfo = #{addressInfo,jdbcType=VARCHAR},
+      stateCode = #{stateCode,jdbcType=INTEGER},
+      OpenId = #{openId,jdbcType=VARCHAR},
+      Tags = #{tags,jdbcType=VARCHAR}
+    where UserId = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select UserId, NickName, Phone, HeadUrl, RegisterTime, LastLoginTime, Sex, Birthday, 
+    AddressInfo, stateCode, OpenId, Tags
+    from m_user
+    where UserId = #{userId,jdbcType=INTEGER}
+  </select>
+  
+	<select id="selectByPhoneNumber" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select UserId, NickName, Phone, HeadUrl, RegisterTime, LastLoginTime, Sex,
+		Birthday,
+		AddressInfo, stateCode, OpenId
+		from m_user
+		where Phone = #{phoneNum,jdbcType=BIGINT}
+	</select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select UserId, NickName, Phone, HeadUrl, RegisterTime, LastLoginTime, Sex, Birthday, 
+    AddressInfo, stateCode, OpenId, Tags
+    from m_user
+  </select>
+  <sql id="Base_Column">
+  		UserId, NickName, Phone, HeadUrl, RegisterTime,
+		LastLoginTime, Sex, Birthday,
+		AddressInfo, StateCode, OpenId, Tags
+  </sql>
+  	<select id="selectByCondition" parameterType="com.mmm.weixin.dto.UserParamDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column" />
+		from m_user
+		<where>
+			<if test="nickName != null and nickName != ''">
+				and NickName = #{nickName}
+			</if>
+			<if test="openId != null and openId != ''">
+				and OpenId = #{openId}
+			</if>
+		</where>
+	</select>
+	<select id="selectByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column" />
+		from m_user where openId = #{openId}
+	</select>
+	<select id="selectUserListByUserId" resultMap="BaseResultMap">
+		select <include refid="Base_Column" />
+		from m_user where UserId in
+		<foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
+</mapper>

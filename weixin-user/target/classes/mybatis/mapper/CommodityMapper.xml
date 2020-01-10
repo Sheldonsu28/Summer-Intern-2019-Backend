@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.CommodityMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Commodity">
+    <id column="CommodityId" jdbcType="INTEGER" property="commodityid" />
+    <result column="CommodityName" jdbcType="VARCHAR" property="commodityname" />
+    <result column="ShortTitle" jdbcType="VARCHAR" property="shorttitle" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendtime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lasttime" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopid" />
+    <result column="CommodityCode" jdbcType="VARCHAR" property="commoditycode" />
+    <result column="StateCode" jdbcType="INTEGER" property="stateCode" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_commodity
+    where CommodityId = #{commodityid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Commodity">
+    insert into m_commodity (CommodityId, CommodityName, ShortTitle, 
+      AppendTime, LastTime, ShopId, 
+      CommodityCode, StateCode)
+    values (#{commodityid,jdbcType=INTEGER}, #{commodityname,jdbcType=VARCHAR}, #{shorttitle,jdbcType=VARCHAR}, 
+      #{appendtime,jdbcType=TIMESTAMP}, #{lasttime,jdbcType=TIMESTAMP}, #{shopid,jdbcType=INTEGER}, 
+      #{commoditycode,jdbcType=VARCHAR}, #{stateCode,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Commodity">
+    update m_commodity
+    set CommodityName = #{commodityname,jdbcType=VARCHAR},
+      ShortTitle = #{shorttitle,jdbcType=VARCHAR},
+      AppendTime = #{appendtime,jdbcType=TIMESTAMP},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      ShopId = #{shopid,jdbcType=INTEGER},
+      CommodityCode = #{commoditycode,jdbcType=VARCHAR},
+      StateCode = #{stateCode,jdbcType=INTEGER}
+    where CommodityId = #{commodityid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select CommodityId, CommodityName, ShortTitle, AppendTime, LastTime, ShopId, CommodityCode, 
+    StateCode
+    from m_commodity
+    where CommodityId = #{commodityid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select CommodityId, CommodityName, ShortTitle, AppendTime, LastTime, ShopId, CommodityCode, 
+    StateCode
+    from m_commodity
+  </select>
+</mapper>

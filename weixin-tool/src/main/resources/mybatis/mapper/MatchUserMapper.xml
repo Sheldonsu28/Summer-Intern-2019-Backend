@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.MatchUserMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.MatchUser">
+    <id column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="NickName" jdbcType="VARCHAR" property="nickName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="HeadUrl" jdbcType="VARCHAR" property="headUrl" />
+    <result column="RegisterTime" jdbcType="TIMESTAMP" property="registerTime" />
+    <result column="LastLoginTime" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="Sex" jdbcType="INTEGER" property="sex" />
+    <result column="Birthday" jdbcType="VARCHAR" property="birthday" />
+    <result column="AddressInfo" jdbcType="VARCHAR" property="addressInfo" />
+    <result column="stateCode" jdbcType="INTEGER" property="stateCode" />
+    <result column="OpenId" jdbcType="VARCHAR" property="openId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_user
+    where UserId = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.MatchUser">
+    insert into m_user (UserId, NickName, Phone, 
+      HeadUrl, RegisterTime, LastLoginTime, 
+      Sex, Birthday, AddressInfo, 
+      stateCode, OpenId)
+    values (#{userId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{headUrl,jdbcType=VARCHAR}, #{registerTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=VARCHAR}, #{addressInfo,jdbcType=VARCHAR}, 
+      #{stateCode,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.MatchUser">
+    update m_user
+    set NickName = #{nickName,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      HeadUrl = #{headUrl,jdbcType=VARCHAR},
+      RegisterTime = #{registerTime,jdbcType=TIMESTAMP},
+      LastLoginTime = #{lastLoginTime,jdbcType=TIMESTAMP},
+      Sex = #{sex,jdbcType=INTEGER},
+      Birthday = #{birthday,jdbcType=VARCHAR},
+      AddressInfo = #{addressInfo,jdbcType=VARCHAR},
+      stateCode = #{stateCode,jdbcType=INTEGER},
+      OpenId = #{openId,jdbcType=VARCHAR}
+    where UserId = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="com.mmm.weixin.dto.param.UserSearchParam" resultMap="BaseResultMap">
+    select UserId, NickName, Phone, HeadUrl, RegisterTime, LastLoginTime, Sex, Birthday, 
+    AddressInfo, stateCode, OpenId
+    from m_user
+    where UserId = #{Uid,jdbcType=INTEGER}
+    <if test="username != null and username != ''">
+      and NickName LIKE Concat('%',Concat(#{username},'%'))
+    </if>
+
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select UserId, NickName, Phone, HeadUrl, RegisterTime, LastLoginTime, Sex, Birthday, 
+    AddressInfo, stateCode, OpenId
+    from m_user
+  </select>
+</mapper>

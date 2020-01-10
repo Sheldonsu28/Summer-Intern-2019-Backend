@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: registry-server
+  profiles:
+    active:
+      - dev
+server:
+  port: 8000
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+---
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/
+spring:
+  profiles: dev
+
+---
+eureka:
+  client:
+    service-url:
+      defaultZone: http://---.---.---:${server.port}/eureka/
+spring:
+  profiles: prod

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.CommentsReplyMapper">
+	<resultMap id="BaseResultMap" type="com.mmm.weixin.vo.CommentsReply">
+		<id column="ReplyId" jdbcType="INTEGER" property="replyId" />
+		<result column="Contents" jdbcType="VARCHAR" property="contents" />
+		<result column="UserId" jdbcType="INTEGER" property="userId" />
+		<result column="ToUserId" jdbcType="INTEGER" property="toUserId" />
+		<result column="CommentId" jdbcType="INTEGER" property="commentId" />
+		<result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from m_commentsreply
+		where ReplyId = #{replyId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.mmm.weixin.vo.CommentsReply">
+		insert into m_commentsreply (ReplyId, Contents, UserId,
+		ToUserId, CommentId, AppendTime
+		)
+		values (#{replyId,jdbcType=INTEGER}, #{contents,jdbcType=VARCHAR},
+		#{userId,jdbcType=INTEGER},
+		#{toUserId,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, #{appendTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.CommentsReply">
+		update m_commentsreply
+		set Contents = #{contents,jdbcType=VARCHAR},
+		UserId = #{userId,jdbcType=INTEGER},
+		ToUserId = #{toUserId,jdbcType=INTEGER},
+		CommentId = #{commentId,jdbcType=INTEGER},
+		AppendTime = #{appendTime,jdbcType=TIMESTAMP}
+		where ReplyId = #{replyId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select ReplyId, Contents, UserId, ToUserId, CommentId, AppendTime
+		from m_commentsreply
+		where ReplyId = #{replyId,jdbcType=INTEGER}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select ReplyId, Contents, UserId, ToUserId, CommentId, AppendTime
+		from m_commentsreply
+	</select>
+	<sql id="Base_Column">
+		ReplyId, Contents, UserId, ToUserId, CommentId, AppendTime
+	</sql>
+	<select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.CommentReplyParamDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column" />
+		from m_commentsreply
+		<where>
+			<if test="commentId != null">
+				and CommentId = #{commentId}
+			</if>
+		</where>
+		order by AppendTime
+	</select>
+</mapper>

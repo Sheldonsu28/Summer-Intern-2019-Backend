@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ContestTeamMemberMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.ContestTeamMember">
+    <id column="CtmId" jdbcType="INTEGER" property="ctmId" />
+    <result column="MemberId" jdbcType="INTEGER" property="memberId" />
+    <result column="MemberName" jdbcType="VARCHAR" property="memberName" />
+    <result column="CtId" jdbcType="INTEGER" property="ctId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_contestteammember
+    where CtmId = #{ctmId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.ContestTeamMember">
+    insert into m_contestteammember (CtmId, MemberId, MemberName, 
+      CtId)
+    values (#{ctmId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{memberName,jdbcType=VARCHAR}, 
+      #{ctId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.ContestTeamMember">
+    update m_contestteammember
+    set MemberId = #{memberId,jdbcType=INTEGER},
+      MemberName = #{memberName,jdbcType=VARCHAR},
+      CtId = #{ctId,jdbcType=INTEGER}
+    where CtmId = #{ctmId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select CtmId, MemberId, MemberName, CtId
+    from m_contestteammember
+    where CtmId = #{ctmId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select CtmId, MemberId, MemberName, CtId
+    from m_contestteammember
+  </select>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.ContestTeamMemberParamDto" resultMap="BaseResultMap">
+  	select CtmId, MemberId, MemberName, CtId
+  	from m_contestteammember
+  	<where>
+  		<if test="memberId != null and memberId != 0">
+  			and MemberId = #{memberId}
+  		</if>
+  		<if test="ctId != null and ctId != 0">
+  			and CtId  = #{ctId}
+  		</if>
+  	</where>
+  </select>
+</mapper>

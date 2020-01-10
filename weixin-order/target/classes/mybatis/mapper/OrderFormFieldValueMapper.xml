@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormFieldValueMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.OrderFormFieldValue">
+    <id column="ValueId" jdbcType="INTEGER" property="valueid" />
+    <result column="FieldId" jdbcType="INTEGER" property="fieldid" />
+    <result column="ValueText" jdbcType="VARCHAR" property="valuetext" />
+    <result column="OrderFormId" jdbcType="INTEGER" property="orderformid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_orderformfieldvalue
+    where ValueId = #{valueid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.OrderFormFieldValue">
+    insert into m_orderformfieldvalue (ValueId, FieldId, ValueText, 
+      OrderFormId)
+    values (#{valueid,jdbcType=INTEGER}, #{fieldid,jdbcType=INTEGER}, #{valuetext,jdbcType=VARCHAR}, 
+      #{orderformid,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.OrderFormFieldValue">
+    update m_orderformfieldvalue
+    set FieldId = #{fieldid,jdbcType=INTEGER},
+      ValueText = #{valuetext,jdbcType=VARCHAR},
+      OrderFormId = #{orderformid,jdbcType=INTEGER}
+    where ValueId = #{valueid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ValueId, FieldId, ValueText, OrderFormId
+    from m_orderformfieldvalue
+    where ValueId = #{valueid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ValueId, FieldId, ValueText, OrderFormId
+    from m_orderformfieldvalue
+  </select>
+  <select id="selectByCondition" parameterType="OrderFormFieldValueParamDto" resultMap="BaseResultMap">
+  	select ValueId, FieldId, ValueText, OrderFormId
+    from m_orderformfieldvalue
+    <where>
+    	<if test="fieldId != null and fieldId != 0">
+    		and FieldId = #{fieldId}
+    	</if>
+    	<if test="orderformId != null and orderformId != 0">
+    		and OrderFormId = #{orderformId}
+    	</if>
+    </where>
+  </select>
+</mapper>

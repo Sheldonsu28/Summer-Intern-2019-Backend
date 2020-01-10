@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormRefundsMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.OrderFormRefunds">
+    <result column="RefundsId" jdbcType="INTEGER" property="refundsid" />
+    <result column="OrderFormId" jdbcType="INTEGER" property="orderformid" />
+    <result column="RefundsCode" jdbcType="VARCHAR" property="refundscode" />
+    <result column="RefundsAmount" jdbcType="INTEGER" property="refundsamount" />
+    <result column="RefundsMethod" jdbcType="INTEGER" property="refundsmethod" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendtime" />
+    <result column="RefundsTime" jdbcType="TIMESTAMP" property="refundstime" />
+    <result column="RefundsCertificate" jdbcType="VARCHAR" property="refundscertificate" />
+    <result column="RefundsSerialNumber" jdbcType="VARCHAR" property="refundsserialnumber" />
+    <result column="RefundsStatus" jdbcType="INTEGER" property="refundsstatus" />
+    <result column="RefundsRemark" jdbcType="VARCHAR" property="refundsremark" />
+  </resultMap>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.OrderFormRefunds">
+    insert into m_orderformrefunds (RefundsId, OrderFormId, RefundsCode, 
+      RefundsAmount, RefundsMethod, AppendTime, 
+      RefundsTime, RefundsCertificate, RefundsSerialNumber, 
+      RefundsStatus, RefundsRemark)
+    values (#{refundsid,jdbcType=INTEGER}, #{orderformid,jdbcType=INTEGER}, #{refundscode,jdbcType=VARCHAR}, 
+      #{refundsamount,jdbcType=INTEGER}, #{refundsmethod,jdbcType=INTEGER}, #{appendtime,jdbcType=TIMESTAMP}, 
+      #{refundstime,jdbcType=TIMESTAMP}, #{refundscertificate,jdbcType=VARCHAR}, #{refundsserialnumber,jdbcType=VARCHAR}, 
+      #{refundsstatus,jdbcType=INTEGER}, #{refundsremark,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select RefundsId, OrderFormId, RefundsCode, RefundsAmount, RefundsMethod, AppendTime, 
+    RefundsTime, RefundsCertificate, RefundsSerialNumber, RefundsStatus, RefundsRemark
+    from m_orderformrefunds
+  </select>
+</mapper>

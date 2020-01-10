@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.MatchPlayerMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.MatchPlayer">
+    <id column="Pid" jdbcType="INTEGER" property="pid" />
+    <result column="Mid" jdbcType="INTEGER" property="mid" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="Role" jdbcType="INTEGER" property="role" />
+    <result column="IsQuit" jdbcType="BIT" property="isQuit" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_match_player
+    where Pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.MatchPlayer">
+    insert into m_match_player (Pid, Mid, UserId,
+      Role, IsQuit, Created, 
+      Updated)
+    values (#{pid,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{role,jdbcType=INTEGER}, #{isQuit,jdbcType=BIT}, #{created,jdbcType=TIMESTAMP}, 
+      #{updated,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="createPlayer" parameterType="com.mmm.weixin.vo.MatchPlayer">
+        insert into m_match_player (Pid, Mid, UserId,
+        Role, IsQuit, Created,
+        Updated)
+        values (#{pid,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+        #{role,jdbcType=INTEGER}, #{isQuit,jdbcType=BIT}, NOW(),
+        NOW())
+    </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.MatchPlayer">
+    update m_match_player
+    <trim prefix="set" suffixOverrides=",">
+    	<if test="mid != null and mid != 0">
+		    MID = #{mid,jdbcType=INTEGER},
+    	</if>
+    	<if test="role != null and role != 0">
+		    Role = #{role,jdbcType=INTEGER},
+    	</if>
+    	<if test="userId != null and userId != 0">
+		    UserId = #{userId,jdbcType=INTEGER},
+    	</if>
+    	<if test="isQuit != null">
+    	  	IsQuit = #{isQuit,jdbcType=BIT},
+    	</if>
+    	<if test="created != null">
+		    Created = #{created,jdbcType=TIMESTAMP},
+    	</if>
+    	<if test="updated != null">
+		    Updated = #{updated,jdbcType=TIMESTAMP},
+    	</if>
+    </trim>
+    where Pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByParam" parameterType="com.mmm.weixin.vo.MatchPlayer">
+    update m_match_player
+    set
+    Role = #{role,jdbcType=INTEGER},
+    Updated = NOW()
+    where MID = #{mid,jdbcType=INTEGER} and UserId = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateIsQuitToTrueByUserId" parameterType="com.mmm.weixin.vo.MatchPlayer">
+    update m_match_player
+    set
+    IsQuit = 1,
+    Updated = NOW()
+    where MID = #{mid,jdbcType=INTEGER} and UserId = #{userId,jdbcType=INTEGER}
+  </update>
+    <update id="updateIsQuitToFalseByUserId" parameterType="com.mmm.weixin.vo.MatchPlayer">
+        update m_match_player
+        set
+        IsQuit = 0,
+        Updated = NOW()
+        where MID = #{mid,jdbcType=INTEGER} and UserId = #{userId,jdbcType=INTEGER}
+    </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Pid, MID, UserId, Role, IsQuit, Created, Updated
+    from m_match_player
+    where Pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByMatchID" parameterType="com.mmm.weixin.dto.param.MatchPlayerParamDto" resultMap="BaseResultMap">
+    select Pid, Mid, UserId, Role, IsQuit, Created, Updated
+    from m_match_player
+    where Mid = #{mid,jdbcType=INTEGER} and Role = #{role,jdbcType=INTEGER} 
+  </select>
+    <select id="selectHistoryPlayer" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select UserId
+        from m_match_player
+        where Mid in (select Mid from m_match_player where UserId = #{userId,jdbcType=INTEGER}) and Role = 1
+    </select>
+    <select id="selectPlayersByMatchIdAndIsQuit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select Pid, Mid, UserId, Role, IsQuit, Created, Updated
+        from m_match_player
+        where Mid = #{mid,jdbcType=INTEGER} and Role = 1 and IsQuit = 0
+    </select>
+  <select id="selectByMidAndUidAndIsQuit" parameterType="com.mmm.weixin.vo.MatchPlayer" resultMap="BaseResultMap">
+    select Pid, Mid, UserId, Role, IsQuit, Created, Updated
+    from m_match_player
+    where Mid = #{mid,jdbcType=INTEGER} and Userid = #{userId,jdbcType=INTEGER} and IsQuit = 0
+  </select>
+    <select id="selectByMidAndUid" parameterType="com.mmm.weixin.vo.MatchPlayer" resultMap="BaseResultMap">
+        select Pid, Mid, UserId, Role, IsQuit, Created, Updated
+        from m_match_player
+        where Mid = #{mid,jdbcType=INTEGER} and Userid = #{userId,jdbcType=INTEGER}
+    </select>
+  <select id="selectByMidAndIsQuit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Pid, Mid, UserId, Role, IsQuit, Created, Updated
+    from m_match_player
+    where Mid = #{mid,jdbcType=INTEGER} and IsQuit = 0
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Pid, MID, UserId, Role, IsQuit, Created, Updated
+    from m_match_player
+  </select>
+  <sql id="Base_Column">
+  	Pid, MID, UserId, Role, IsQuit, Created, Updated
+  </sql>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_match_player where UserId=#{userId}
+  </select>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.MatchPlayerParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_match_player 
+  	<where>
+  		<if test="userId != null and userId != 0">
+  			UserId=#{userId}
+  		</if>
+  		<if test="mid != null and mid != 0">
+  			and Mid=#{mid}
+  		</if>
+  		<if test="status != null and status !=0">
+  			and Mid in(select Mid from m_match where Status = #{status})
+  		</if>
+  		<if test="role != null and role != 0">
+  			and Role = #{role}
+  		</if>
+  	</where>
+  </select>
+</mapper>

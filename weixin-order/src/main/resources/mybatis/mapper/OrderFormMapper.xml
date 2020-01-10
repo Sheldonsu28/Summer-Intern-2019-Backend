@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.OrderForm">
+    <id column="OrderFormId" jdbcType="INTEGER" property="orderformid" />
+    <result column="OrderFormCode" jdbcType="VARCHAR" property="orderformcode" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendtime" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="OrderFormType" jdbcType="INTEGER" property="orderformtype" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lasttime" />
+    <result column="TotalAmount" jdbcType="DECIMAL" property="totalamount" />
+    <result column="ShouldPayAmount" jdbcType="DECIMAL" property="shouldpayamount" />
+    <result column="ActualPayAmount" jdbcType="DECIMAL" property="actualpayamount" />
+    <result column="PayMethod" jdbcType="INTEGER" property="paymethod" />
+    <result column="StateCode" jdbcType="INTEGER" property="stateCode" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_orderform
+    where OrderFormId = #{orderformid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.OrderForm" useGeneratedKeys="true" keyProperty="orderformid">
+    insert into m_orderform (OrderFormCode, AppendTime, 
+      UserId, OrderFormType, LastTime, 
+      TotalAmount, ShouldPayAmount, ActualPayAmount, 
+      PayMethod, StateCode, Remark, 
+      IsDelete, ShopId)
+    values (#{orderformcode,jdbcType=VARCHAR}, #{appendtime,jdbcType=TIMESTAMP}, 
+      #{userId,jdbcType=INTEGER}, #{orderformtype,jdbcType=INTEGER}, #{lasttime,jdbcType=TIMESTAMP},
+      #{totalamount,jdbcType=DECIMAL}, #{shouldpayamount,jdbcType=DECIMAL}, #{actualpayamount,jdbcType=DECIMAL}, 
+      #{paymethod,jdbcType=INTEGER}, #{stateCode,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+      #{isdelete,jdbcType=BIT}, #{shopid,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.OrderForm">
+    update m_orderform
+    set OrderFormCode = #{orderformcode,jdbcType=VARCHAR},
+      AppendTime = #{appendtime,jdbcType=TIMESTAMP},
+      UserId = #{userId,jdbcType=INTEGER},
+      OrderFormType = #{orderformtype,jdbcType=INTEGER},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      TotalAmount = #{totalamount,jdbcType=DECIMAL},
+      ShouldPayAmount = #{shouldpayamount,jdbcType=DECIMAL},
+      ActualPayAmount = #{actualpayamount,jdbcType=DECIMAL},
+      PayMethod = #{paymethod,jdbcType=INTEGER},
+      StateCode = #{stateCode,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      IsDelete = #{isdelete,jdbcType=BIT},
+      ShopId = #{shopid,jdbcType=INTEGER}
+    where OrderFormId = #{orderformid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select OrderFormId, OrderFormCode, AppendTime, UserId, OrderFormType, LastTime, TotalAmount, 
+    ShouldPayAmount, ActualPayAmount, PayMethod, StateCode, Remark, IsDelete, ShopId
+    from m_orderform
+    where OrderFormId = #{orderformid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select OrderFormId, OrderFormCode, AppendTime, UserId, OrderFormType, LastTime, TotalAmount, 
+    ShouldPayAmount, ActualPayAmount, PayMethod, StateCode, Remark, IsDelete, ShopId
+    from m_orderform
+  </select>
+</mapper>

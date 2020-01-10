@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ShopMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Shop">
+    <id column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="ShopName" jdbcType="VARCHAR" property="shopName" />
+    <result column="ShopAccount" jdbcType="VARCHAR" property="shopAccount" />
+    <result column="ShopPassword" jdbcType="VARCHAR" property="shopPassword" />
+    <result column="AddressInfo" jdbcType="VARCHAR" property="addressInfo" />
+    <result column="ShopTel" jdbcType="VARCHAR" property="shopTel" />
+    <result column="ContactName" jdbcType="VARCHAR" property="contactName" />
+    <result column="ShopLogo" jdbcType="VARCHAR" property="shopLogo" />
+    <result column="Contents" jdbcType="VARCHAR" property="contents" />
+    <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="StateCode" jdbcType="INTEGER" property="stateCode" />
+    <result column="ShopType" jdbcType="INTEGER" property="shopType" />
+    <result column="PositionData" jdbcType="VARCHAR" property="positionData" />
+    <result column="OpeningHoursStart" jdbcType="VARCHAR" property="openingHoursStart" />
+    <result column="OpeningHoursEnd" jdbcType="VARCHAR" property="openingHoursEnd" />
+    <result column="AreaId" jdbcType="INTEGER" property="areaId" />
+    <result column="TagsText" jdbcType="VARCHAR" property="tagsText" />
+  </resultMap>
+  <resultMap type="com.mmm.weixin.dto.MatchShopDto" id="MatchShopMap">
+  	<id column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="ShopName" jdbcType="VARCHAR" property="shopName" />
+    <result column="AddressInfo" jdbcType="VARCHAR" property="addressInfo" />
+    <result column="PositionData" jdbcType="VARCHAR" property="positionData" />
+    <result column="num" jdbcType="INTEGER" property="playedTimes"/>
+  </resultMap>
+
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_shop
+    where ShopId = #{shopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Shop">
+    insert into m_shop (ShopId, ShopName, ShopAccount, 
+      ShopPassword, AddressInfo, ShopTel, 
+      ContactName, ShopLogo, Contents, 
+      CreateTime, LastTime, StateCode, 
+      ShopType, PositionData, OpeningHoursStart, 
+      OpeningHoursEnd, AreaId, TagsText
+      )
+    values (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopAccount,jdbcType=VARCHAR}, 
+      #{shopPassword,jdbcType=VARCHAR}, #{addressInfo,jdbcType=VARCHAR}, #{shopTel,jdbcType=VARCHAR}, 
+      #{contactName,jdbcType=VARCHAR}, #{shopLogo,jdbcType=VARCHAR}, #{contents,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, #{stateCode,jdbcType=INTEGER}, 
+      #{shopType,jdbcType=INTEGER}, #{positionData,jdbcType=VARCHAR}, #{openingHoursStart,jdbcType=VARCHAR}, 
+      #{openingHoursEnd,jdbcType=VARCHAR}, #{areaId,jdbcType=INTEGER}, #{tagsText,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Shop">
+    update m_shop
+    set ShopName = #{shopName,jdbcType=VARCHAR},
+      ShopAccount = #{shopAccount,jdbcType=VARCHAR},
+      ShopPassword = #{shopPassword,jdbcType=VARCHAR},
+      AddressInfo = #{addressInfo,jdbcType=VARCHAR},
+      ShopTel = #{shopTel,jdbcType=VARCHAR},
+      ContactName = #{contactName,jdbcType=VARCHAR},
+      ShopLogo = #{shopLogo,jdbcType=VARCHAR},
+      Contents = #{contents,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      LastTime = #{lastTime,jdbcType=TIMESTAMP},
+      StateCode = #{stateCode,jdbcType=INTEGER},
+      ShopType = #{shopType,jdbcType=INTEGER},
+      PositionData = #{positionData,jdbcType=VARCHAR},
+      OpeningHoursStart = #{openingHoursStart,jdbcType=VARCHAR},
+      OpeningHoursEnd = #{openingHoursEnd,jdbcType=VARCHAR},
+      AreaId = #{areaId,jdbcType=INTEGER},
+      TagsText = #{tagsText,jdbcType=VARCHAR}
+    where ShopId = #{shopId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ShopId, ShopName, ShopAccount, ShopPassword, AddressInfo, ShopTel, ContactName, 
+    ShopLogo, Contents, CreateTime, LastTime, StateCode, ShopType, PositionData, OpeningHoursStart, 
+    OpeningHoursEnd, AreaId, TagsText
+    from m_shop
+    where ShopId = #{shopId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ShopId, ShopName, ShopAccount, ShopPassword, AddressInfo, ShopTel, ContactName, 
+    ShopLogo, Contents, CreateTime, LastTime, StateCode, ShopType, PositionData, OpeningHoursStart, 
+    OpeningHoursEnd, AreaId, TagsText
+    from m_shop
+  </select>
+  <sql id="Base_Column">
+  		ShopId, ShopName, ShopAccount, ShopPassword, AddressInfo, ShopTel, ContactName, 
+    ShopLogo, Contents, CreateTime, LastTime, StateCode, ShopType, PositionData, OpeningHoursStart, 
+    OpeningHoursEnd, AreaId, TagsText
+  </sql>
+  <select id="selectMatchShopByCondition" parameterType="com.mmm.weixin.dto.MatchShopParamDto" resultMap="MatchShopMap">
+  	select
+		<include refid="Base_Column" />
+		from m_shop
+		<where>
+			StateCode = 1
+			<if test="shopName != null and shopName != ''">
+				and ShopName LIKE
+				CONCAT(CONCAT('%',#{shopName},'%'))
+			</if>
+			<if test="areaId != null and areaId != 0">
+				and AreaId = #{areaId}
+			</if>
+		</where>
+  </select>
+  <select id="selectPlayedMatchShop" parameterType="PlayedMatchShopParamDto" resultMap="MatchShopMap">
+  	SELECT a.*,b.num 
+  	FROM 
+  	m_shop a 
+  	RIGHT JOIN 
+  	(SELECT ShopId,UserId,COUNT(*) AS num FROM m_match GROUP BY ShopId HAVING UserId= #{userId}) b 
+  	ON a.`ShopId`=b.ShopId
+  	<where>
+  		<if test="shopName != null and shopName != ''">
+  			ShopName LIKE
+				CONCAT(CONCAT('%',#{shopName},'%'))
+  		</if>
+  	</where>
+  	ORDER BY num DESC
+  </select>
+</mapper>

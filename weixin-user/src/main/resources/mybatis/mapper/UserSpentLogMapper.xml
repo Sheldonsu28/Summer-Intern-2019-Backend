@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.UserSpentLogMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.UserSpentLog">
+    <id column="Lid" jdbcType="INTEGER" property="lid" />
+    <result column="Pid" jdbcType="INTEGER" property="pid" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+    <result column="Amount" jdbcType="INTEGER" property="amount" />
+    <result column="BusinessType" jdbcType="INTEGER" property="businessType" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_purse_log
+    where Lid = #{lid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.UserSpentLog">
+    insert into m_purse_log (Lid, Pid, AppendTime, 
+      Amount, BusinessType, Created, 
+      Updated)
+    values (#{lid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{appendTime,jdbcType=TIMESTAMP}, 
+      #{amount,jdbcType=INTEGER}, #{businessType,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, 
+      #{updated,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertInterUserTransactionRecord" parameterType="com.mmm.weixin.vo.UserSpentLog">
+    insert into m_purse_log (Pid, AppendTime,
+    Amount, BusinessType, Created,
+    Updated)
+    values (#{pid,jdbcType=INTEGER}, NOW(),
+    #{amount,jdbcType=INTEGER}, #{businessType,jdbcType=INTEGER}, NOW(),
+    NOW())
+  </insert>
+  <insert id="insertTransactionRecord" parameterType="com.mmm.weixin.vo.UserSpentLog">
+    insert into m_purse_log (Pid, AppendTime,
+    Amount, BusinessType, Created,
+    Updated)
+    values (#{pid,jdbcType=INTEGER}, NOW(),
+    #{amount,jdbcType=INTEGER}, #{businessType,jdbcType=INTEGER}, NOW(),
+    NOW())
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.UserSpentLog">
+    update m_purse_log
+    set Pid = #{pid,jdbcType=INTEGER},
+      AppendTime = #{appendTime,jdbcType=TIMESTAMP},
+      Amount = #{amount,jdbcType=INTEGER},
+      BusinessType = #{businessType,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Lid = #{lid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Lid, Pid, AppendTime, Amount, BusinessType, Created, Updated
+    from m_purse_log
+    where Lid = #{lid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Lid, Pid, AppendTime, Amount, BusinessType, Created, Updated
+    from m_purse_log
+  </select>
+</mapper>

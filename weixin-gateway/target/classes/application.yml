@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: gateway
+  profiles:
+    active:
+      - dev
+server:
+  ssl:
+    key-store: classpath:api.cywl168.cn.jks
+    key-store-password: tl9p28xtn36
+
+zuul:
+  host:    connect-timeout-millis: 10000
+    socket-timeout-millis: 60000
+  ignoredServices: '*'
+  routes:
+    user-service:
+      path: /user/**
+      service-id: user
+    order-service:
+      path: /order/**
+      service-id: order
+    commodity-service:
+      path: /commodity/**
+      service-id: commodity
+    seller-service: 
+      path: /seller/**
+      service-id: seller
+    tool-service: 
+      path: /tool/**
+      service-id: tool
+  sensitive-headers: 
+ribbon:
+  ReadTimeout: 50000
+  SocketTimeout: 50000
+
+hystrix:
+    command:
+        default:
+            execution:
+                isolation:
+                    thread:
+                        timeoutInMilliseconds: 60000
+
+---
+server:
+  port: 80
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+spring:
+  profiles: dev
+
+---
+server:
+  port: 8100
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.81.252.137:8000/eureka/
+  #instance:
+    #instance-id: api.cywl168.cn
+    #prefer-ip-address: true 
+spring:
+  profiles: prod

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.MatchResultMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.MatchResult">
+    <id column="Rid" jdbcType="INTEGER" property="rid" />
+    <result column="Mid" jdbcType="INTEGER" property="mid" />
+    <result column="Hid" jdbcType="INTEGER" property="hid" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="Result" jdbcType="INTEGER" property="result" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <resultMap type="com.mmm.weixin.dto.SinglePlayerResultDto" id="SinglePlayerResultMap">
+  	<result column="holes" jdbcType="INTEGER" property="holes"/>
+  	<result column="bars" jdbcType="INTEGER" property="bars"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_match_result
+    where Rid = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.MatchResult">
+    insert into m_match_result (Rid, Mid, Hid, 
+      UserId, Result, Created, 
+      Updated)
+    values (#{rid,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{hid,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER}, #{result,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, 
+      #{updated,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="createResult" parameterType="com.mmm.weixin.vo.MatchResult">
+    insert into m_match_result (Mid, Hid,
+    UserId, Result, Created,
+    Updated)
+    values ( #{mid,jdbcType=INTEGER}, #{hid,jdbcType=INTEGER},
+    #{userId,jdbcType=INTEGER}, #{result,jdbcType=INTEGER}, NOW(),
+    NOW())
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.MatchResult">
+    update m_match_result
+    set Mid = #{mid,jdbcType=INTEGER},
+      Hid = #{hid,jdbcType=INTEGER},
+      UserId = #{userId,jdbcType=INTEGER},
+      Result = #{result,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Rid = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByRid" parameterType="com.mmm.weixin.vo.MatchResult">
+    update m_match_result
+    set Result = #{result,jdbcType=INTEGER},
+    Updated = NOW()
+    where Rid = #{rid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Rid, Mid, Hid, UserId, Result, Created, Updated
+    from m_match_result
+    where Rid = #{rid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Rid, Mid, Hid, UserId, Result, Created, Updated
+    from m_match_result
+  </select>
+  <sql id="Base_Column">
+  	Rid, Mid, Hid, UserId, Result, Created, Updated
+  </sql>
+  <select id="selectByMidAndUserId" parameterType="com.mmm.weixin.dto.param.MatchResultParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_match_result where Mid = #{mid} and UserId = #{userId}
+  </select>
+  <select id="selectByParameter" parameterType="com.mmm.weixin.dto.param.MatchResultParamDto" resultMap="BaseResultMap">
+    select <include refid="Base_Column"/>
+    from m_match_result where Mid = #{mid} and UserId = #{userId} and Hid = #{hid}
+  </select>
+  <select id="selectPlayerResult" parameterType="com.mmm.weixin.dto.param.MatchPlayerParamDto" resultMap="SinglePlayerResultMap">
+  	SELECT COUNT(*) AS holes,IF(Result IS NULL,0,SUM(Result)) AS bars,b.UserId AS uid,b.`NickName` AS `name`,b.`HeadUrl` AS `headUrl` FROM m_match_result a RIGHT JOIN m_user b ON a.`UserId`=b.`UserId` WHERE a.`mid` = #{mid} AND a.UserId = #{userId}
+  </select>
+</mapper>

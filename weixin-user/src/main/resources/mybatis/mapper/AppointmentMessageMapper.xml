@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AppointmentMessageMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AppointmentMessage">
+    <id column="Amid" jdbcType="INTEGER" property="amid" />
+    <result column="Bid" jdbcType="INTEGER" property="bid" />
+    <result column="SenderId" jdbcType="INTEGER" property="senderId" />
+    <result column="ReceiverId" jdbcType="INTEGER" property="receiverId" />
+    <result column="Type" jdbcType="INTEGER" property="type" />
+    <result column="Status" jdbcType="BIT" property="status" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_appointment_msg
+    where Amid = #{amid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AppointmentMessage">
+    insert into m_appointment_msg (Amid, Bid, SenderId, 
+      ReceiverId, Type, Status, 
+      Created, Updated)
+    values (#{amid,jdbcType=INTEGER}, #{bid,jdbcType=INTEGER}, #{senderId,jdbcType=INTEGER}, 
+      #{receiverId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{status,jdbcType=BIT}, 
+      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AppointmentMessage">
+    update m_appointment_msg
+    set Bid = #{bid,jdbcType=INTEGER},
+      SenderId = #{senderId,jdbcType=INTEGER},
+      ReceiverId = #{receiverId,jdbcType=INTEGER},
+      Type = #{type,jdbcType=INTEGER},
+      Status = #{status,jdbcType=BIT},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Amid = #{amid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Amid, Bid, SenderId, ReceiverId, Type, Status, Created, Updated
+    from m_appointment_msg
+    where Amid = #{amid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Amid, Bid, SenderId, ReceiverId, Type, Status, Created, Updated
+    from m_appointment_msg
+  </select>
+  <select id="selectByUid" parameterType="com.mmm.weixin.dto.param.AppointmentMsgParamDto" resultMap="BaseResultMap">
+  	select Amid, Bid, SenderId,ReceiverId, Type, Status, Created, Updated
+  	from m_appointment_msg 
+  	<where>
+  		<if test="uid != null and uid != 0">
+  			ReceiverId = #{uid}
+  		</if>
+  		<if test="isPlayer == true">
+  			and Type = 4 and Bid in(select Apid from m_appointment_player where Organizer = #{uid} and Status = 1)
+  		</if>
+  		<if test="isPlayer == false">
+  			and Type != 4 and Status = 0  and SenderId != #{uid}
+  		</if>
+  	</where>
+  	order by Created desc
+  </select>
+  <select id="selectUnreadByUid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	SELECT IF(COUNT(*) IS NULL,0,COUNT(*))AS num FROM m_appointment_msg WHERE ReceiverId = #{uid} AND SenderId != #{uid} AND ((TYPE != 4 AND STATUS = 0) OR (TYPE =4 AND Bid IN(SELECT Apid FROM m_appointment_player WHERE Organizer = #{uid} AND STATUS = 1)))
+  </select>
+</mapper>

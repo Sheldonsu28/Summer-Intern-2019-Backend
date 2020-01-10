@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.CommentsMapper">
+	<resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Comments">
+		<id column="CommentId" jdbcType="INTEGER" property="commentId" />
+		<result column="UserId" jdbcType="INTEGER" property="userId" />
+		<result column="Contents" jdbcType="VARCHAR" property="contents" />
+		<result column="ImgUrl" jdbcType="VARCHAR" property="imgUrl" />
+		<result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+		<result column="IsShow" jdbcType="BIT" property="isShow" />
+		<result column="PlusCount" jdbcType="INTEGER" property="plusCount" />
+		<result column="ShopId" jdbcType="INTEGER" property="shopId" />
+	</resultMap>
+	<resultMap type="com.mmm.weixin.dto.CommentDto" id="CommentDto">
+		<id column="CommentId" jdbcType="INTEGER" property="commentId" />
+		<result column="UserId" jdbcType="INTEGER" property="userId" />
+		<result column="Contents" jdbcType="VARCHAR" property="contents" />
+		<result column="ImgUrl" jdbcType="VARCHAR" property="imgUrl" />
+		<result column="PlusCount" jdbcType="INTEGER" property="plusCount" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from m_comments
+		where CommentId = #{commentId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.mmm.weixin.vo.Comments">
+		insert into m_comments (CommentId, UserId, Contents,
+		ImgUrl, AppendTime, IsShow,
+		PlusCount, ShopId)
+		values (#{commentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+		#{contents,jdbcType=VARCHAR},
+		#{imgUrl,jdbcType=VARCHAR}, #{appendTime,jdbcType=TIMESTAMP}, #{isShow,jdbcType=BIT},
+		#{plusCount,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Comments">
+		update m_comments
+		set UserId = #{userId,jdbcType=INTEGER},
+		Contents = #{contents,jdbcType=VARCHAR},
+		ImgUrl = #{imgUrl,jdbcType=VARCHAR},
+		AppendTime = #{appendTime,jdbcType=TIMESTAMP},
+		IsShow = #{isShow,jdbcType=BIT},
+		PlusCount = #{plusCount,jdbcType=INTEGER},
+		ShopId = #{shopId,jdbcType=INTEGER}
+		where CommentId = #{commentId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select CommentId, UserId, Contents, ImgUrl, AppendTime, IsShow, PlusCount,
+		ShopId
+		from m_comments
+		where CommentId = #{commentId,jdbcType=INTEGER}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select CommentId, UserId, Contents, ImgUrl, AppendTime, IsShow, PlusCount,
+		ShopId
+		from m_comments
+	</select>
+	<sql id="Base_Column">
+		CommentId, UserId, Contents, ImgUrl, AppendTime, IsShow,
+		PlusCount, ShopId
+	</sql>
+	<select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.CommentParamDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column" />
+		from m_comments
+		<where>
+			<if test="userId != null">
+				and UserId = #{userId}
+			</if>
+			<if test="shop != null">
+				and ShopId = #{shopId}
+			</if>
+		</where>
+	</select>
+	<select id="selectCommentDtoByCondition" parameterType="com.mmm.weixin.dto.param.CommentParamDto" resultType="CommentDto">
+		select
+		<include refid="Base_Column" />
+		from m_comments
+		<where>
+			<if test="userId != null">
+				and UserId = #{userId}
+			</if>
+			<if test="shopId != null">
+				and ShopId = #{shopId}
+			</if>
+		</where>
+	</select>
+</mapper>

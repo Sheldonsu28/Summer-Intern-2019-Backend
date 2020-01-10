@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ContestTeamInfoMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.ContestTeamInfo">
+    <id column="CtId" jdbcType="INTEGER" property="ctId" />
+    <result column="TeamId" jdbcType="INTEGER" property="teamId" />
+    <result column="ContestId" jdbcType="INTEGER" property="contestId" />
+    <result column="OrderFormId" jdbcType="INTEGER" property="orderFormId" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_contestteaminfo
+    where CtId = #{ctId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.ContestTeamInfo" useGeneratedKeys="true" keyProperty="ctId">
+    insert into m_contestteaminfo (CtId, TeamId, ContestId, 
+      OrderFormId, AppendTime)
+    values (#{ctId,jdbcType=INTEGER}, #{teamId,jdbcType=INTEGER}, #{contestId,jdbcType=INTEGER}, 
+      #{orderFormId,jdbcType=INTEGER}, #{appendTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.ContestTeamInfo">
+    update m_contestteaminfo
+    set TeamId = #{teamId,jdbcType=INTEGER},
+      ContestId = #{contestId,jdbcType=INTEGER},
+      OrderFormId = #{orderFormId,jdbcType=INTEGER},
+      AppendTime = #{appendTime,jdbcType=TIMESTAMP}
+    where CtId = #{ctId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select CtId, TeamId, ContestId, OrderFormId, AppendTime
+    from m_contestteaminfo
+    where CtId = #{ctId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select CtId, TeamId, ContestId, OrderFormId, AppendTime
+    from m_contestteaminfo
+  </select>
+  <sql id="Base_Column">
+  	CtId, TeamId, ContestId, OrderFormId, AppendTime
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.vo.ContestTeamInfo" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_contestteaminfo
+  	<where>
+  		<if test="teamId != null and teamId != 0">
+  			and TeamId = #{teamId}
+  		</if>
+  		<if test="contestId != null and contestId != 0 ">
+  			and ContestId = #{contestId}
+  		</if>
+  		<if test="orderFormId != null and orderFormId != 0">
+  			and OrderFormId = #{orderFormId}
+  		</if>
+  	</where>
+  </select>
+</mapper>

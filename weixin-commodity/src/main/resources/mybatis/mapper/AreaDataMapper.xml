@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AreaDataMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AreaData">
+    <id column="AreaId" jdbcType="INTEGER" property="areaId" />
+    <result column="AreaName" jdbcType="VARCHAR" property="areaName" />
+    <result column="IsHot" jdbcType="BIT" property="isHot" />
+    <result column="ParentId" jdbcType="INTEGER" property="parentId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_areadata
+    where AreaId = #{areaId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AreaData">
+    insert into m_areadata (AreaId, AreaName, IsHot, 
+      ParentId)
+    values (#{areaId,jdbcType=INTEGER}, #{areaName,jdbcType=VARCHAR}, #{isHot,jdbcType=BIT}, 
+      #{parentId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AreaData">
+    update m_areadata
+    set AreaName = #{areaName,jdbcType=VARCHAR},
+      IsHot = #{isHot,jdbcType=BIT},
+      ParentId = #{parentId,jdbcType=INTEGER}
+    where AreaId = #{areaId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select AreaId, AreaName, IsHot, ParentId
+    from m_areadata
+    where AreaId = #{areaId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select AreaId, AreaName, IsHot, ParentId
+    from m_areadata
+  </select>
+    <sql id="Base_Column">
+  	AreaId,AreaName,IsHot,ParentId
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.AreaDataParamDto" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column"/>
+  	from m_areadata
+  	<where>
+  		<if test="isFuzzy == 1 and areaName != null and areaName != ''">
+  			and AreaName LIKE CONCAT(CONCAT('%',#{areaName},'%')) and ParentId != 0
+  		</if>
+  		<if test="isFuzzy == 0 and areaName != null and areaName != ''">
+  			and AreaName = #{areaName}
+  		</if>
+  		<if test="isHot != null">
+  			and IsHot = #{isHot}
+  		</if>
+  		<if test="parentId != null">
+  			and ParentId = #{parentId}
+  		</if>
+  	</where>
+  </select>
+</mapper>

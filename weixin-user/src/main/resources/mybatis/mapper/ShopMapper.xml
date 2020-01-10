@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ShopMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Shop">
+    <id column="ShopId" jdbcType="INTEGER" property="shopid" />
+    <result column="ShopName" jdbcType="VARCHAR" property="shopname" />
+    <result column="ShopAccount" jdbcType="VARCHAR" property="shopaccount" />
+    <result column="ShopPassword" jdbcType="VARCHAR" property="shoppassword" />
+    <result column="AddressInfo" jdbcType="VARCHAR" property="addressinfo" />
+    <result column="ShopTel" jdbcType="VARCHAR" property="shoptel" />
+    <result column="ContactName" jdbcType="VARCHAR" property="contactname" />
+    <result column="ShopLogo" jdbcType="VARCHAR" property="shoplogo" />
+    <result column="Contents" jdbcType="VARCHAR" property="contents" />
+    <result column="CreateTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lasttime" />
+    <result column="StateCode" jdbcType="INTEGER" property="statecode" />
+    <result column="ShopType" jdbcType="INTEGER" property="shoptype" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_shop
+    where ShopId = #{shopid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Shop">
+    insert into m_shop (ShopId, ShopName, ShopAccount, 
+      ShopPassword, AddressInfo, ShopTel, 
+      ContactName, ShopLogo, Contents, 
+      CreateTime, LastTime, StateCode, 
+      ShopType)
+    values (#{shopid,jdbcType=INTEGER}, #{shopname,jdbcType=VARCHAR}, #{shopaccount,jdbcType=VARCHAR}, 
+      #{shoppassword,jdbcType=VARCHAR}, #{addressInfo,jdbcType=VARCHAR}, #{shoptel,jdbcType=VARCHAR},
+      #{contactname,jdbcType=VARCHAR}, #{shoplogo,jdbcType=VARCHAR}, #{contents,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{lasttime,jdbcType=TIMESTAMP}, #{stateCode,jdbcType=INTEGER},
+      #{shoptype,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Shop">
+    update m_shop
+    set ShopName = #{shopname,jdbcType=VARCHAR},
+      ShopAccount = #{shopaccount,jdbcType=VARCHAR},
+      ShopPassword = #{shoppassword,jdbcType=VARCHAR},
+      AddressInfo = #{addressInfo,jdbcType=VARCHAR},
+      ShopTel = #{shoptel,jdbcType=VARCHAR},
+      ContactName = #{contactname,jdbcType=VARCHAR},
+      ShopLogo = #{shoplogo,jdbcType=VARCHAR},
+      Contents = #{contents,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP},
+      StateCode = #{stateCode,jdbcType=INTEGER},
+      ShopType = #{shoptype,jdbcType=INTEGER}
+    where ShopId = #{shopid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ShopId, ShopName, ShopAccount, ShopPassword, AddressInfo, ShopTel, ContactName, 
+    ShopLogo, Contents, CreateTime, LastTime, StateCode, ShopType
+    from m_shop
+    where ShopId = #{shopid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ShopId, ShopName, ShopAccount, ShopPassword, AddressInfo, ShopTel, ContactName, 
+    ShopLogo, Contents, CreateTime, LastTime, StateCode, ShopType
+    from m_shop
+  </select>
+</mapper>

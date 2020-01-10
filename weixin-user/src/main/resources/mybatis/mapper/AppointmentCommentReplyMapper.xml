@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AppointmentCommentReplyMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AppointmentCommentReply">
+    <id column="Arid" jdbcType="INTEGER" property="arid" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="CommentId" jdbcType="INTEGER" property="commentId" />
+    <result column="ReplyId" jdbcType="INTEGER" property="replyId" />
+    <result column="ReplyUserId" jdbcType="INTEGER" property="replyUserId" />
+    <result column="IsShow" jdbcType="BIT" property="isShow" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="Content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_appointment_comment_reply
+    where Arid = #{arid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AppointmentCommentReply" keyProperty="arid" useGeneratedKeys="true">
+    insert into m_appointment_comment_reply (Arid, UserId, CommentId, 
+      ReplyId, ReplyUserId, IsShow, 
+      Created, Updated, Content
+      )
+    values (#{arid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, 
+      #{replyId,jdbcType=INTEGER}, #{replyUserId,jdbcType=INTEGER}, #{isShow,jdbcType=BIT}, 
+      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AppointmentCommentReply">
+    update m_appointment_comment_reply
+    set UserId = #{userId,jdbcType=INTEGER},
+      CommentId = #{commentId,jdbcType=INTEGER},
+      ReplyId = #{replyId,jdbcType=INTEGER},
+      ReplyUserId = #{replyUserId,jdbcType=INTEGER},
+      IsShow = #{isShow,jdbcType=BIT},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP},
+      Content = #{content,jdbcType=LONGVARCHAR}
+    where Arid = #{arid,jdbcType=INTEGER}
+  </update>
+  <update id="updateToInvisibleByPrimaryKey" parameterType="java.lang.Integer">
+    update m_appointment_comment_reply
+    set
+    IsShow = 0,
+    Updated = NOW()
+    where Arid = #{arid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Arid, UserId, CommentId, ReplyId, ReplyUserId, IsShow, Created, Updated, Content
+    from m_appointment_comment_reply
+    where Arid = #{arid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByCommentID" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Arid, UserId, CommentId, ReplyId, ReplyUserId, IsShow, Created, Updated, Content
+    from m_appointment_comment_reply
+    where CommentId = #{commentId,jdbcType=INTEGER} and IsShow = 1
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Arid, UserId, CommentId, ReplyId, ReplyUserId, IsShow, Created, Updated, Content
+    from m_appointment_comment_reply
+  </select>
+</mapper>

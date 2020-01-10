@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.GolfAreaMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.GolfArea">
+    <id column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="Active" jdbcType="BIT" property="active" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_golf_area
+    where Aid = #{aid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.GolfArea">
+    insert into m_golf_area (Aid, Name, ShopId, 
+      Created, Updated, Active
+      )
+    values (#{aid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, 
+      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}, #{active,jdbcType=BIT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.GolfArea">
+    update m_golf_area
+    set Name = #{name,jdbcType=VARCHAR},
+      ShopId = #{shopId,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP},
+      Active = #{active,jdbcType=BIT}
+    where Aid = #{aid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Aid, Name, ShopId, Created, Updated, Active
+    from m_golf_area
+    where Aid = #{aid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Aid, Name, ShopId, Created, Updated, Active
+    from m_golf_area
+  </select>
+  <select id="selectByCondition" parameterType="MatchAreaQueryParamDto" resultMap="BaseResultMap">
+  	select Aid, Name, ShopId, Created, Updated, Active
+  	from m_golf_area
+  	<where>
+  		<if test="shopId != null and shopId != 0">
+  			and ShopId = #{shopId}
+  		</if>
+  	</where>
+    ORDER BY NAME
+  </select> 
+</mapper>

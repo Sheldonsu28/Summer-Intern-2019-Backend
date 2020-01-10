@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.UserPurseMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.UserPurse">
+    <id column="Pid" jdbcType="INTEGER" property="pid" />
+    <result column="Uid" jdbcType="INTEGER" property="uid" />
+    <result column="FrozeAmount" jdbcType="INTEGER" property="frozeAmount" />
+    <result column="Balance" jdbcType="INTEGER" property="balance" />
+    <result column="PayPwd" jdbcType="VARCHAR" property="payPwd" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_user_purse
+    where Pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.UserPurse">
+    insert into m_user_purse (Pid, Uid, FrozeAmount, 
+      Balance, PayPwd, Created, 
+      Updated)
+    values (#{pid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{frozeAmount,jdbcType=INTEGER}, 
+      #{balance,jdbcType=INTEGER}, #{payPwd,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
+      #{updated,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.UserPurse">
+    update m_user_purse
+    set Uid = #{uid,jdbcType=INTEGER},
+      FrozeAmount = #{frozeAmount,jdbcType=INTEGER},
+      Balance = #{balance,jdbcType=INTEGER},
+      PayPwd = #{payPwd,jdbcType=VARCHAR},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateBalanceByPid" parameterType="com.mmm.weixin.vo.UserPurse">
+    update m_user_purse
+    set Balance = #{balance,jdbcType=INTEGER}
+    where Pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Pid, Uid, FrozeAmount, Balance, PayPwd, Created, Updated
+    from m_user_purse
+    where Pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Pid, Uid, FrozeAmount, Balance, PayPwd, Created, Updated
+    from m_user_purse
+    where Uid = #{uid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Pid, Uid, FrozeAmount, Balance, PayPwd, Created, Updated
+    from m_user_purse
+  </select>
+</mapper>

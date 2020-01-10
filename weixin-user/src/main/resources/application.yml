@@ -1,0 +1,77 @@
+server:
+  port: 8300
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /v1/api-docs
+spring:
+  profiles:
+    include:
+    - common
+    active:
+    - dev
+  datasource: 
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      dbcp2:
+        max-total: 5
+        min-idle: 5
+        initial-size: 5
+        max-wait-millis: 10000
+  application:
+    name: user
+  messages:
+    basename: i18n/Messages
+mybatis:
+  config-location: classpath:mybatis/mybatis.cfg.xml
+  type-aliases-package: com.mmm.weixin.vo
+  mapper-locations:
+  - classpath:mybatis/mapper/*.xml
+hystrix:
+  command: 
+    default: 
+      execution: 
+        isolation:
+          thread:
+            timeoutInMillisecond: 100000
+baidu.ak:
+#百度逆地理编码api
+baidu.geocoder: http://api.map.baidu.com/geocoder/v2/?ak=${baidu.ak}&location={0},{1}&output=json&pois=1
+todayBeginDateStr: 今天({0}/{1}) {2}
+tomorrowBeginDateStr: 明天({0}/{1}) {2}
+---
+spring: 
+  datasource:
+    url: jdbc:mysql://localhost:3306/o2o?useUnicode=true&autoReconnect=true
+#   url: jdbc:mysql://mysql:3306/weixin
+    username: root
+    password:
+  profiles: dev
+eureka: 
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+#     服务器地址
+#     defaultZone: http://localhost:8000/eureka/ 
+logging:
+  level:
+      com.mmm.weixin.dao: debug
+appid:
+secret:
+code2Session: https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secret}&js_code={0}&grant_type=authorization_code
+---
+spring: 
+  datasource:
+    url:
+#   url: jdbc:mysql://mysql:3306/weixin
+    username: root
+    password:
+  profiles: prod
+eureka: 
+  client:
+    service-url:
+      defaultZone: http:/:8000/eureka/
+appid:
+secret:
+code2Session: https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secret}&js_code={0}&grant_type=authorization_code

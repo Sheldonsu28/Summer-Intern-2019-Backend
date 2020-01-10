@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.CommodityImageMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.CommodityImage">
+    <id column="ImgId" jdbcType="INTEGER" property="imgId" />
+    <result column="ImgUrl" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="ImgType" jdbcType="INTEGER" property="imgType" />
+    <result column="CommodityId" jdbcType="INTEGER" property="commodityId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_commodityimage
+    where ImgId = #{imgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.CommodityImage">
+    insert into m_commodityimage (ImgId, ImgUrl, ImgType, 
+      CommodityId)
+    values (#{imgId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{imgType,jdbcType=INTEGER}, 
+      #{commodityId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.CommodityImage">
+    update m_commodityimage
+    set ImgUrl = #{imgUrl,jdbcType=VARCHAR},
+      ImgType = #{imgType,jdbcType=INTEGER},
+      CommodityId = #{commodityId,jdbcType=INTEGER}
+    where ImgId = #{imgId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ImgId, ImgUrl, ImgType, CommodityId
+    from m_commodityimage
+    where ImgId = #{imgId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ImgId, ImgUrl, ImgType, CommodityId
+    from m_commodityimage
+  </select>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.CommodityImgParamDto" resultMap="BaseResultMap">
+	select ImgId, ImgUrl, ImgType, CommodityId
+	from m_commodityimage
+	<where>
+		<if test="imgType != null">
+			and ImgType = #{imgType}
+		</if>
+		<if test="commodityId != null">
+			and CommodityId = #{commodityId}
+		</if>
+	</where>
+  </select>
+</mapper>

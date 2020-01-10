@@ -1,0 +1,44 @@
+spring: 
+  redis:
+    database: 0
+    host:
+    port:
+    password:
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+    timeout: 0
+    
+hystrix_error: 服务不可用,请稍后再试
+inner_error: 内部错误
+jwt_expire_milli: 2592000000
+#jwt_expire_milli: 6000
+secret_key:
+shop_service: seller
+user_service: user
+commodity_service: commodity
+order_service: order
+
+#微信信息
+weixin_secret:
+weixin_appid:
+weixin_access_token_url: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${weixin_appid}&secret=${weixin_secret}
+#获取微信小程序码
+weixin_code_url: https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={0}
+
+#七牛信息
+qiniu_server_ip_address:
+qiniu_access_key:
+qiniu_secret_key:
+#七牛存储空间名称
+qiniu_bucket_name: ticketing_img
+
+golf_tool_wxapp_page: pages/Eventdetalis/main
+appointment_wxapp_page: pages/ballDetails/main
+
+#腾讯短信
+qq_sms_appkey:
+qq_smsSign: 程誉网络科技
+qq_sms_appid:

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AreaHoleMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AreaHole">
+    <id column="Hid" jdbcType="INTEGER" property="hid" />
+    <result column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="StandardBar" jdbcType="INTEGER" property="standardBar" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="Active" jdbcType="BIT" property="active" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_area_hole
+    where Hid = #{hid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AreaHole">
+    insert into m_area_hole (Hid, Aid, Name, 
+      StandardBar, Created, Updated, 
+      Active)
+    values (#{hid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{standardBar,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}, 
+      #{active,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AreaHole">
+    update m_area_hole
+    set Aid = #{aid,jdbcType=INTEGER},
+      Name = #{name,jdbcType=VARCHAR},
+      StandardBar = #{standardBar,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP},
+      Active = #{active,jdbcType=BIT}
+    where Hid = #{hid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Hid, Aid, Name, StandardBar, Created, Updated, Active
+    from m_area_hole
+    where Hid = #{hid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByAidAndShopID" parameterType="com.mmm.weixin.vo.AreaHole" resultMap="BaseResultMap">
+    select Hid, Aid, Name, StandardBar, Created, Updated, Active
+    from m_area_hole
+    where Aid = #{aid,jdbcType=INTEGER} and ShopId = #{shopId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Hid, Aid, Name, StandardBar, Created, Updated, Active
+    from m_area_hole
+  </select>
+  <sql id="Base_Column">
+  	Hid, Aid, Name, StandardBar, Created, Updated, Active
+  </sql>
+  <select id="selectByAid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_area_hole
+  	where Aid = #{aid}
+  </select>
+</mapper>

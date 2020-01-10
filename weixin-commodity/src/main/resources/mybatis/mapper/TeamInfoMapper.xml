@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.TeamInfoMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.TeamInfo">
+    <id column="TeamId" jdbcType="INTEGER" property="teamId" />
+    <result column="TeamName" jdbcType="VARCHAR" property="teamName" />
+    <result column="TeamContactName" jdbcType="VARCHAR" property="teamContactName" />
+    <result column="TeamContactPhone" jdbcType="VARCHAR" property="teamContactPhone" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="AreaId" jdbcType="INTEGER" property="areaId" />
+    <result column="TeamRemark" jdbcType="LONGVARCHAR" property="teamRemark" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_teaminfo
+    where TeamId = #{teamId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.TeamInfo" useGeneratedKeys="true" keyProperty="teamId">
+    insert into m_teaminfo (TeamId, TeamName, TeamContactName, 
+      TeamContactPhone, AppendTime, LastTime, 
+      UserId, AreaId, TeamRemark
+      )
+    values (#{teamId,jdbcType=INTEGER}, #{teamName,jdbcType=VARCHAR}, #{teamContactName,jdbcType=VARCHAR}, 
+      #{teamContactPhone,jdbcType=VARCHAR}, #{appendTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, 
+      #{userId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{teamRemark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.TeamInfo">
+    update m_teaminfo
+    set TeamName = #{teamName,jdbcType=VARCHAR},
+      TeamContactName = #{teamContactName,jdbcType=VARCHAR},
+      TeamContactPhone = #{teamContactPhone,jdbcType=VARCHAR},
+      AppendTime = #{appendTime,jdbcType=TIMESTAMP},
+      LastTime = #{lastTime,jdbcType=TIMESTAMP},
+      UserId = #{userId,jdbcType=INTEGER},
+      AreaId = #{areaId,jdbcType=INTEGER},
+      TeamRemark = #{teamRemark,jdbcType=LONGVARCHAR}
+    where TeamId = #{teamId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select TeamId, TeamName, TeamContactName, TeamContactPhone, AppendTime, LastTime, 
+    UserId, AreaId, TeamRemark
+    from m_teaminfo
+    where TeamId = #{teamId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select TeamId, TeamName, TeamContactName, TeamContactPhone, AppendTime, LastTime, 
+    UserId, AreaId, TeamRemark
+    from m_teaminfo
+  </select>
+  <sql id="Base_Column">
+  	TeamId, TeamName, TeamContactName, TeamContactPhone, AppendTime, LastTime, 
+    UserId, AreaId, TeamRemark
+  </sql>	
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.TeamInfoParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_teaminfo
+  	<where>
+  		<if test="teamName != null and teamName != ''">
+  			and TeamName = #{teamName}
+  		</if>
+  		<if test="userId != null and userId != 0">
+  			and UserId = #{userId}
+  		</if>
+  		<if test="teamId != null and teamId != 0">
+  			and TeamId = #{teamId}
+  		</if>
+  	</where>
+  </select>
+  <select id="selectByNameAndId" parameterType="com.mmm.weixin.dto.param.TeamInfoParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_teaminfo
+  	<where>
+  		<if test="teamName != null and teamName != ''">
+  			and TeamName = #{teamName}
+  		</if>
+  		<if test="teamId != null and teamId != 0">
+  			and TeamId != #{teamId}
+  		</if>
+  	</where>
+  </select>
+</mapper>

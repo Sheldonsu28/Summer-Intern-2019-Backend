@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Feedback">
+    <id column="FeedbackId" jdbcType="INTEGER" property="feedbackid" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="Contents" jdbcType="VARCHAR" property="contents" />
+    <result column="ContactInfo" jdbcType="VARCHAR" property="contactinfo" />
+    <result column="ImgUrl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="AppendTime" jdbcType="TIMESTAMP" property="appendtime" />
+    <result column="LastTime" jdbcType="TIMESTAMP" property="lasttime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_feedback
+    where FeedbackId = #{feedbackid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Feedback">
+    insert into m_feedback (FeedbackId, UserId, Contents, 
+      ContactInfo, ImgUrl, AppendTime, 
+      LastTime)
+    values (#{feedbackid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{contents,jdbcType=VARCHAR},
+      #{contactinfo,jdbcType=VARCHAR}, #{imgurl,jdbcType=VARCHAR}, #{appendtime,jdbcType=TIMESTAMP}, 
+      #{lasttime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Feedback">
+    update m_feedback
+    set UserId = #{userId,jdbcType=INTEGER},
+      Contents = #{contents,jdbcType=VARCHAR},
+      ContactInfo = #{contactinfo,jdbcType=VARCHAR},
+      ImgUrl = #{imgurl,jdbcType=VARCHAR},
+      AppendTime = #{appendtime,jdbcType=TIMESTAMP},
+      LastTime = #{lasttime,jdbcType=TIMESTAMP}
+    where FeedbackId = #{feedbackid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select FeedbackId, UserId, Contents, ContactInfo, ImgUrl, AppendTime, LastTime
+    from m_feedback
+    where FeedbackId = #{feedbackid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select FeedbackId, UserId, Contents, ContactInfo, ImgUrl, AppendTime, LastTime
+    from m_feedback
+  </select>
+</mapper>

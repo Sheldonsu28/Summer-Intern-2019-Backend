@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ShopImageMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.ShopImage">
+    <id column="ImgId" jdbcType="INTEGER" property="imgId" />
+    <result column="ImgUrl" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="ImgType" jdbcType="INTEGER" property="imgType" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopId" />
+  </resultMap>
+  <resultMap id="ShopImageDto" type="com.mmm.weixin.dto.ShopImageDto">
+    <id column="ImgId" jdbcType="INTEGER" property="imgId" />
+    <result column="ImgUrl" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="ImgType" jdbcType="INTEGER" property="imgType" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_shopimage
+    where ImgId = #{imgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.ShopImage">
+    insert into m_shopimage (ImgId, ImgUrl, ImgType, 
+      ShopId)
+    values (#{imgId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{imgType,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.ShopImage">
+    update m_shopimage
+    set ImgUrl = #{imgUrl,jdbcType=VARCHAR},
+      ImgType = #{imgType,jdbcType=INTEGER},
+      ShopId = #{shopId,jdbcType=INTEGER}
+    where ImgId = #{imgId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select ImgId, ImgUrl, ImgType, ShopId
+    from m_shopimage
+    where ImgId = #{imgId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ImgId, ImgUrl, ImgType, ShopId
+    from m_shopimage
+  </select>
+  <sql id="Base_Column">
+  	ImgId, ImgUrl, ImgType, ShopId
+  </sql>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.mmm.weixin.dto.param.ShopImageParamDto">
+  	select <include refid="Base_Column"/>
+  	from m_shopimage
+  	<where>
+  		<if test="shopId != null">
+			and ShopId = #{shopId}  		
+  		</if>
+  	</where>
+  </select>
+</mapper>

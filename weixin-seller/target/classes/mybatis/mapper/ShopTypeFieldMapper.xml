@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.ShopTypeFieldMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.ShopTypeField">
+    <id column="FieldId" jdbcType="INTEGER" property="fieldId" />
+    <result column="FieldEnName" jdbcType="VARCHAR" property="fieldEnName" />
+    <result column="FieldCnName" jdbcType="VARCHAR" property="fieldCnName" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="FieldType" jdbcType="VARCHAR" property="fieldType" />
+    <result column="ShopType" jdbcType="INTEGER" property="shopType" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_shoptypefield
+    where FieldId = #{fieldId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.ShopTypeField">
+    insert into m_shoptypefield (FieldId, FieldEnName, FieldCnName, 
+      Remark, FieldType, ShopType
+      )
+    values (#{fieldId,jdbcType=INTEGER}, #{fieldEnName,jdbcType=VARCHAR}, #{fieldCnName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{fieldType,jdbcType=VARCHAR}, #{shopType,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.ShopTypeField">
+    update m_shoptypefield
+    set FieldEnName = #{fieldEnName,jdbcType=VARCHAR},
+      FieldCnName = #{fieldCnName,jdbcType=VARCHAR},
+      Remark = #{remark,jdbcType=VARCHAR},
+      FieldType = #{fieldType,jdbcType=VARCHAR},
+      ShopType = #{shopType,jdbcType=INTEGER}
+    where FieldId = #{fieldId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select FieldId, FieldEnName, FieldCnName, Remark, FieldType, ShopType
+    from m_shoptypefield
+    where FieldId = #{fieldId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select FieldId, FieldEnName, FieldCnName, Remark, FieldType, ShopType
+    from m_shoptypefield
+  </select>
+</mapper>

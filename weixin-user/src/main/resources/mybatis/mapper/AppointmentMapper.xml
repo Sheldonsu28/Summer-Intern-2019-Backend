@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AppointmentMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Appointment">
+    <id column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="Price" jdbcType="VARCHAR" property="price" />
+    <result column="Number" jdbcType="INTEGER" property="number" />
+    <result column="Content" jdbcType="VARCHAR" property="content" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="ShareCount" jdbcType="INTEGER" property="shareCount" />
+    <result column="PlusCount" jdbcType="INTEGER" property="plusCount" />
+    <result column="IsRecommend" jdbcType="BIT" property="isRecommend" />
+    <result column="DeadLine" jdbcType="TIMESTAMP" property="deadLine" />
+    <result column="BeginDate" jdbcType="TIMESTAMP" property="beginDate" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <sql id="Base_Column">
+   	Aid, ShopId, UserId, Title, Price, Number, Content, Status, ShareCount, PlusCount, 
+    IsRecommend, DeadLine, BeginDate, Created, Updated
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_appointment
+    where Aid = #{aid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Appointment" useGeneratedKeys="true" keyProperty="aid">
+    insert into m_appointment (Aid, ShopId, UserId, 
+      Title, Price, Number, 
+      Content, Status, ShareCount, 
+      PlusCount, IsRecommend, DeadLine, 
+      BeginDate, Created, Updated
+      )
+    values (#{aid,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{shareCount,jdbcType=INTEGER}, 
+      #{plusCount,jdbcType=INTEGER}, #{isRecommend,jdbcType=BIT}, #{deadLine,jdbcType=TIMESTAMP}, 
+      #{beginDate,jdbcType=TIMESTAMP}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Appointment">
+    update m_appointment
+    set ShopId = #{shopId,jdbcType=INTEGER},
+      UserId = #{userId,jdbcType=INTEGER},
+      Title = #{title,jdbcType=VARCHAR},
+      Price = #{price,jdbcType=VARCHAR},
+      Number = #{number,jdbcType=INTEGER},
+      Content = #{content,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      ShareCount = #{shareCount,jdbcType=INTEGER},
+      PlusCount = #{plusCount,jdbcType=INTEGER},
+      IsRecommend = #{isRecommend,jdbcType=BIT},
+      DeadLine = #{deadLine,jdbcType=TIMESTAMP},
+      BeginDate = #{beginDate,jdbcType=TIMESTAMP},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Aid = #{aid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Aid, ShopId, UserId, Title, Price, Number, Content, Status, ShareCount, PlusCount, 
+    IsRecommend, DeadLine, BeginDate, Created, Updated
+    from m_appointment
+    where Aid = #{aid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Aid, ShopId, UserId, Title, Price, Number, Content, Status, ShareCount, PlusCount, 
+    IsRecommend, DeadLine, BeginDate, Created, Updated
+    from m_appointment
+  </select>
+    <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.AppointmentQueryDto" resultMap="BaseResultMap">
+  	select Aid, ShopId, UserId, Title, Price, Number, Content, STATUS, IF(ShareCount IS NULL,0,ShareCount)as ShareCount, IF(PlusCount IS NULL,0,PlusCount)as PlusCount, DeadLine, BeginDate, Created, Updated
+  	from m_appointment
+  	<where>
+  		Status = 1
+  		<if test="userId != null and userId != 0">
+  			and UserId = #{userId}
+  		</if>
+        <if test="sex != null and sex != 3">
+            and UserId in (select UserId from m_user where sex = #{sex})
+        </if>
+        <if test="joinPlayerType != null">
+        	<if test="joinPlayerType == 1">
+        		and Aid in(select Aid from m_appointment_player WHERE `Status` = 2)
+        	</if>
+        	<if test="joinPlayerType == 2">
+        		and Aid NOT IN(select Aid from m_appointment_player WHERE `Status` = 2)
+        	</if>
+        </if>
+        <if test="isRecommend != null">
+        	and IsRecommend = #{isRecommend}
+        </if>
+  	</where>
+  	order by Created desc
+  </select>
+  
+  <select id="selectByComment" parameterType="com.mmm.weixin.dto.param.AppointmentQueryDto" resultMap="BaseResultMap">
+  	SELECT DISTINCT a.Aid, a.ShopId, a.UserId,a.Title,a.Price, a.Number, a.Content, a.Status, IF(a.ShareCount IS NULL,0,a.ShareCount)AS ShareCount, IF(a.PlusCount IS NULL,0,a.PlusCount)AS PlusCount, a.DeadLine,a.BeginDate, a.Created, a.Updated
+  	FROM m_appointment a LEFT JOIN m_appointment_comment b ON a.`Aid`=b.`Aid` 
+  	<where> 
+  	a.Status = 1 AND a.`UserId` != #{userId}
+  	AND (b.UserId = #{userId} 
+  	OR 
+  	b.`Acid` IN(SELECT CommentId FROM m_appointment_comment_reply WHERE UserId = #{userId})) 
+    <if test="joinPlayerType != null">    
+        <if test="joinPlayerType == 1">
+     		and a.Aid in(select Aid from m_appointment_player WHERE `Status` = 2 and Joiner = #{userId})
+     	</if>
+     	<if test="joinPlayerType == 2">
+     		and a.Aid NOT IN(select Aid from m_appointment_player WHERE `Status` = 2 and Joiner = #{userId})
+     	</if>
+     </if>
+  	</where>
+  	ORDER BY a.Created DESC
+  </select>
+
+</mapper>

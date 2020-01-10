@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AppointmentPlayerMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AppointmentPlayer">
+    <id column="Apid" jdbcType="INTEGER" property="apid" />
+    <result column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="Organizer" jdbcType="INTEGER" property="organizer" />
+    <result column="Joiner" jdbcType="INTEGER" property="joiner" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_appointment_player
+    where Apid = #{apid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AppointmentPlayer" useGeneratedKeys="true" keyProperty="apid">
+    insert into m_appointment_player (Apid, Aid, Organizer, 
+      Joiner, Status, Created, 
+      Updated)
+    values (#{apid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{organizer,jdbcType=INTEGER}, 
+      #{joiner,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, 
+      #{updated,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AppointmentPlayer">
+    update m_appointment_player
+    set Aid = #{aid,jdbcType=INTEGER},
+      Organizer = #{organizer,jdbcType=INTEGER},
+      Joiner = #{joiner,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Apid = #{apid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Apid, Aid, Organizer, Joiner, Status, Created, Updated
+    from m_appointment_player
+    where Apid = #{apid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Apid, Aid, Organizer, Joiner, Status, Created, Updated
+    from m_appointment_player
+  </select>
+  <sql id="Base_Column">
+  	Apid, Aid, Organizer, Joiner, Status, Created, Updated
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.AppointmentPlayerQueryDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_appointment_player
+  	<where>
+  		<if test="joiner != null and joiner != 0">
+  			Joiner = #{joiner}
+  		</if>
+  		<if test="aid != null and aid != 0">
+  			and Aid = #{aid}
+  		</if>
+  		<if test="status != null and status != 0">
+  			and Status = #{status}
+  		</if>
+  	</where>
+  </select>
+</mapper>

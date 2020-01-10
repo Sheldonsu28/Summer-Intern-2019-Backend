@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.AppointmentForwardMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.AppointmentForward">
+    <id column="Afid" jdbcType="INTEGER" property="afid" />
+    <result column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="SendUserId" jdbcType="INTEGER" property="sendUserId" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_appointment_forward
+    where Afid = #{afid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.AppointmentForward" useGeneratedKeys="true" keyProperty="afid">
+    insert into m_appointment_forward (Afid, Aid, SendUserId, 
+      Created, Updated)
+    values (#{afid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{sendUserId,jdbcType=INTEGER}, 
+      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.AppointmentForward">
+    update m_appointment_forward
+    set Aid = #{aid,jdbcType=INTEGER},
+      SendUserId = #{sendUserId,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP}
+    where Afid = #{afid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Afid, Aid, SendUserId, Created, Updated
+    from m_appointment_forward
+    where Afid = #{afid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Afid, Aid, SendUserId, Created, Updated
+    from m_appointment_forward
+  </select>
+</mapper>

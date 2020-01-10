@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.MatchDetailMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.MatchDetail">
+    <id column="Did" jdbcType="INTEGER" property="did" />
+    <result column="Mid" jdbcType="INTEGER" property="mid" />
+    <result column="Aid" jdbcType="INTEGER" property="aid" />
+    <result column="Hid" jdbcType="INTEGER" property="hid" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="Active" jdbcType="BIT" property="active" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_match_detail
+    where Did = #{did,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.MatchDetail">
+    insert into m_match_detail (Did, Mid, Aid, 
+      Hid, Created, Updated, 
+      Active)
+    values (#{did,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, 
+      #{hid,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}, 
+      #{active,jdbcType=BIT})
+  </insert>
+  <insert id="createDetail" parameterType="com.mmm.weixin.vo.MatchDetail">
+    insert into m_match_detail (Did, Mid, Aid,
+    Hid, Created, Updated,
+    Active)
+    values (#{did,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER},
+    #{hid,jdbcType=INTEGER}, NOW(), NOW(),
+    #{active,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.MatchDetail">
+    update m_match_detail
+    set Mid = #{mid,jdbcType=INTEGER},
+      Aid = #{aid,jdbcType=INTEGER},
+      Hid = #{hid,jdbcType=INTEGER},
+      Created = #{created,jdbcType=TIMESTAMP},
+      Updated = #{updated,jdbcType=TIMESTAMP},
+      Active = #{active,jdbcType=BIT}
+    where Did = #{did,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Did, Mid, Aid, Hid, Created, Updated, Active
+    from m_match_detail
+    where Did = #{did,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Did, Mid, Aid, Hid, Created, Updated, Active
+    from m_match_detail
+  </select>
+  <sql id="Base_Column">
+  	Did, Mid, Aid, Hid, UserId, Result, Created, Updated, Active
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.MatchDetailParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_match_detail
+  	<where>
+  		<if test="mid != null and mid != 0">
+  			and Mid = #{mid}
+  		</if>
+  	</where>
+  </select>
+  <select id="selectMatchArea" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	SELECT DISTINCT(a.Aid) FROM m_match_detail a LEFT JOIN m_golf_area b ON a.Aid = b.Aid WHERE a.`Mid`  = #{mid} ORDER BY b.Name
+  </select>
+  
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.CommodityMapper">
+	<resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Commodity">
+		<id column="CommodityId" jdbcType="INTEGER" property="commodityId" />
+		<result column="CommodityName" jdbcType="VARCHAR" property="commodityName" />
+		<result column="ShortTitle" jdbcType="VARCHAR" property="shortTitle" />
+		<result column="AppendTime" jdbcType="TIMESTAMP" property="appendTime" />
+		<result column="LastTime" jdbcType="TIMESTAMP" property="lastTime" />
+		<result column="ShopId" jdbcType="INTEGER" property="shopId" />
+		<result column="CommodityCode" jdbcType="VARCHAR" property="commodityCode" />
+		<result column="StateCode" jdbcType="INTEGER" property="stateCode" />
+		<result column="PropertyCode" jdbcType="INTEGER" property="propertyCode" />
+		<result column="Price" jdbcType="DECIMAL" property="price" />
+		<result column="SpecialPrice" jdbcType="DECIMAL" property="specialPrice" />
+		<result column="IsDefault" jdbcType="BIT" property="isDefault" />
+		<result column="TypeCode" jdbcType="INTEGER" property="typeCode" />
+		<result column="Contents" jdbcType="LONGVARCHAR" property="contents" />
+		<result column="NotesText" jdbcType="LONGVARCHAR" property="notesText" />
+	</resultMap>
+	<resultMap id="CommodityDto" type="com.mmm.weixin.dto.CommodityDto">
+		<id column="CommodityId" jdbcType="INTEGER" property="commodityId" />
+		<result column="CommodityName" jdbcType="VARCHAR" property="commodityName" />
+		<result column="ShopId" jdbcType="INTEGER" property="shopId" />
+		<result column="Price" jdbcType="DECIMAL" property="price" />
+		<result column="SpecialPrice" jdbcType="DECIMAL" property="specialPrice" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from m_commodity where CommodityId = #{commodityId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.mmm.weixin.vo.Commodity">
+		insert into m_commodity (CommodityId, CommodityName, ShortTitle,
+		AppendTime, LastTime, ShopId,
+		CommodityCode, StateCode, PropertyCode,
+		Price, SpecialPrice, IsDefault,
+		TypeCode, Contents, NotesText
+		)
+		values (#{commodityId,jdbcType=INTEGER}, #{commodityName,jdbcType=VARCHAR},
+		#{shortTitle,jdbcType=VARCHAR},
+		#{appendTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER},
+		#{commodityCode,jdbcType=VARCHAR}, #{stateCode,jdbcType=INTEGER},
+		#{propertyCode,jdbcType=INTEGER},
+		#{price,jdbcType=DECIMAL}, #{specialPrice,jdbcType=DECIMAL}, #{isDefault,jdbcType=BIT},
+		#{typeCode,jdbcType=INTEGER}, #{contents,jdbcType=LONGVARCHAR},
+		#{notesText,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Commodity">
+		update m_commodity
+		set CommodityName = #{commodityName,jdbcType=VARCHAR},
+		ShortTitle = #{shortTitle,jdbcType=VARCHAR},
+		AppendTime = #{appendTime,jdbcType=TIMESTAMP},
+		LastTime = #{lastTime,jdbcType=TIMESTAMP},
+		ShopId = #{shopId,jdbcType=INTEGER},
+		CommodityCode = #{commodityCode,jdbcType=VARCHAR},
+		StateCode = #{stateCode,jdbcType=INTEGER},
+		PropertyCode = #{propertyCode,jdbcType=INTEGER},
+		Price = #{price,jdbcType=DECIMAL},
+		SpecialPrice = #{specialPrice,jdbcType=DECIMAL},
+		IsDefault = #{isDefault,jdbcType=BIT},
+		TypeCode = #{typeCode,jdbcType=INTEGER},
+		Contents = #{contents,jdbcType=LONGVARCHAR},
+		NotesText = #{notesText,jdbcType=LONGVARCHAR}
+		where CommodityId = #{commodityId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select CommodityId, CommodityName, ShortTitle, AppendTime, LastTime, ShopId,
+		CommodityCode,
+		StateCode, PropertyCode, Price, SpecialPrice, IsDefault, TypeCode, Contents,
+		NotesText
+		from m_commodity
+		where CommodityId = #{commodityId,jdbcType=INTEGER}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select CommodityId, CommodityName, ShortTitle, AppendTime, LastTime, ShopId,
+		CommodityCode,
+		StateCode, PropertyCode, Price, SpecialPrice, IsDefault, TypeCode, Contents,
+		NotesText
+		from m_commodity
+	</select>
+	<sql id="Base_Column">
+		CommodityId, CommodityName, ShortTitle, AppendTime,
+		LastTime, ShopId, CommodityCode,
+		StateCode, PropertyCode, Price, SpecialPrice, IsDefault, TypeCode, Contents,
+		NotesText
+	</sql>
+	<select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.CommodityParamDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column" />
+		from m_commodity
+		<where>
+			<if test="shopId != null">
+				and ShopId = #{shopId}
+			</if>
+		</where>
+	</select>
+	<select id="selectCommDtoByCondition" parameterType="com.mmm.weixin.dto.param.CommodityParamDto" resultMap="CommodityDto">
+		select
+		<include refid="Base_Column" />
+		from m_commodity
+		<where>
+			<if test="shopId != null">
+				and ShopId = #{shopId}
+			</if>
+		</where>
+	</select>
+	<select id="selectDefaultCommodityByCondition" parameterType="com.mmm.weixin.dto.GolfShopParamDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column" />
+		from m_commodity
+		<where>
+			IsDefault = true and TypeCode = 1
+			<if test="golfName != null and golfName != ''">
+				and CommodityName LIKE
+				CONCAT(CONCAT('%',#{golfName},'%'))
+			</if>
+			<if test="areaId != null and areaId != 0">
+				and ShopId in(select ShopId from m_shop where AreaId =
+				#{areaId})
+			</if>
+			<if test="sortType != null">
+				<if test="sortType == 1">
+					order by AppendTime desc
+				</if>
+				<if test="sortType == 2">
+					order by Price
+				</if>
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectCommodityByProperty" parameterType="com.mmm.weixin.dto.FlashSaleCommodityParamDto" resultMap="BaseResultMap">
+		select <include refid="Base_Column"/>
+		from m_commodity
+		<where>
+			<if test="propertyCode != null and propertyCode != 0">
+				and PropertyCode = #{propertyCode}
+			</if>
+			<if test="typeCode != null and typeCode != 0">
+				and TypeCode = #{typeCode} 
+			</if>
+		</where>
+	</select>
+</mapper>

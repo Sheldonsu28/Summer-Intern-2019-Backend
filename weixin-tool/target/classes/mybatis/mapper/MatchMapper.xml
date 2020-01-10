@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.MatchMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.Match">
+    <id column="Mid" jdbcType="INTEGER" property="mid" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="Time" jdbcType="TIMESTAMP" property="time" />
+    <result column="ContestantNumber" jdbcType="INTEGER" property="contestantNumber" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopId" />
+    <result column="UserId" jdbcType="INTEGER" property="userId" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="Created" jdbcType="TIMESTAMP" property="created" />
+    <result column="Updated" jdbcType="TIMESTAMP" property="updated" />
+    <result column="Active" jdbcType="BIT" property="active" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_match
+    where Mid = #{mid,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.mmm.weixin.vo.Match">
+    insert into m_match (Mid, Name, Time, 
+      ContestantNumber, ShopId, UserId, 
+      Status, Created, Updated, 
+      Active)
+    values (#{mid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, 
+      #{contestantNumber,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}, 
+      #{active,jdbcType=BIT})
+  </insert>
+    <insert id="createMatch" parameterType="com.mmm.weixin.vo.Match">
+        insert into m_match (Name, Time,
+        ContestantNumber, ShopId, UserId,
+        Status, Created, Updated,
+        Active)
+        values ( #{name,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP},
+        #{contestantNumber,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER}, NOW(), NOW(),
+        #{active,jdbcType=BIT})
+    </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.Match">
+    update m_match
+    <trim prefix="set" suffixOverrides=",">
+	    <if test="name != null and name != ''">
+		    Name = #{name,jdbcType=VARCHAR},
+	    </if>
+	    <if test="time != null">
+	      	Time = #{time,jdbcType=TIMESTAMP},
+	    </if>
+	    <if test="contestantNumber != null and contestantNumber != 0">
+	      ContestantNumber = #{contestantNumber,jdbcType=INTEGER},	    
+	    </if>
+    	<if test="shopId != null and shopId != 0">
+	      ShopId = #{shopId,jdbcType=INTEGER},	    
+	    </if>
+    	<if test="userId != null and userId != 0">
+	      UserId = #{userId,jdbcType=INTEGER},	    
+	    </if>
+	    <if test="status != null and status != 0">
+	      Status = #{status,jdbcType=INTEGER},	    
+	    </if>
+	   	<if test="created != null">
+	      Created = #{created,jdbcType=TIMESTAMP},
+	    </if>
+	    <if test="updated != null">
+	      Updated = #{updated,jdbcType=TIMESTAMP},
+	    </if>
+	    <if test="active != null">
+	      Active = #{active,jdbcType=BIT}	    
+	    </if>
+    </trim>
+    where Mid = #{mid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByMid" parameterType="com.mmm.weixin.vo.Match">
+    update m_match
+    set Name = #{name,jdbcType=VARCHAR},
+    Time = #{time,jdbcType=TIMESTAMP},
+    ContestantNumber = #{contestantNumber,jdbcType=INTEGER},
+    ShopId = #{shopId,jdbcType=INTEGER},
+    UserId = #{userId,jdbcType=INTEGER},
+    Status = #{status,jdbcType=INTEGER},
+    Updated = #{updated,jdbcType=TIMESTAMP},
+    Active = #{active,jdbcType=BIT}
+    where Mid = #{mid,jdbcType=INTEGER}
+  </update>
+    <update id="updateNameAndTimeByMid" parameterType="com.mmm.weixin.vo.Match">
+        update m_match
+        set Name = #{name,jdbcType=VARCHAR},
+        Time = #{time,jdbcType=TIMESTAMP},
+        Updated = NOW()
+        where Mid = #{mid,jdbcType=INTEGER}
+    </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Mid, Name, Time, ContestantNumber, ShopId, UserId, Status, Created, Updated, 
+    Active
+    from m_match
+    where Mid = #{mid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select Mid, Name, Time, ContestantNumber, ShopId, UserId, Status, Created, Updated, 
+    Active
+    from m_match
+  </select>
+  <select id="selectByUserID" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select Mid, Name, Time, ContestantNumber, ShopId, UserId, Status, Created, Updated,
+    Active
+    from m_match
+    where UserId = #{uid, jdbcType=INTEGER}
+  </select>
+  <sql id="Base_Column">
+  	Mid, Name, Time, ContestantNumber, ShopId, UserId, Status, Created, Updated, Active
+  </sql>
+  <select id="selectByCondition" parameterType="com.mmm.weixin.dto.param.UserMatchParamDto" resultMap="BaseResultMap">
+  	select <include refid="Base_Column" />
+  	from m_match
+  	<where>
+  		<if test="userId != null and userId !=0">
+	  		and UserId = #{userId} 
+  		</if>
+  		<if test="status !=null and status !=0">
+  			and Status = #{status}
+  		</if>
+  		<if test="mid != null and mid != 0 ">
+  			and Mid = #{mid}
+  		</if>
+  	</where>
+  	order by Created desc
+  </select>
+    <select id="selectLatestMatchByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select max(Mid)
+        from
+        (select Mid from m_match where UserId = #{userId, jdbcType=INTEGER}) as mids;
+    </select>
+  <select id="selectReadyMatch" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/> 
+  	from m_match where <![CDATA[DATE_FORMAT(`Time`,'%Y-%m-%d %H:%i') <= #{beginTime}]]> and `Status` = 1
+  </select>
+</mapper>

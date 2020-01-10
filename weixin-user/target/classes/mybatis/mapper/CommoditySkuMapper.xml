@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.CommoditySkuMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.CommoditySku">
+    <id column="SKUId" jdbcType="INTEGER" property="skuid" />
+    <result column="SKUName" jdbcType="VARCHAR" property="skuname" />
+    <result column="SKUPrice" jdbcType="DECIMAL" property="skuprice" />
+    <result column="ShopId" jdbcType="INTEGER" property="shopid" />
+    <result column="StockCount" jdbcType="INTEGER" property="stockcount" />
+    <result column="CommodityId" jdbcType="INTEGER" property="commodityid" />
+    <result column="SpecialPrice" jdbcType="DECIMAL" property="specialprice" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_commoditysku
+    where SKUId = #{skuid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.CommoditySku">
+    insert into m_commoditysku (SKUId, SKUName, SKUPrice, 
+      ShopId, StockCount, CommodityId, 
+      SpecialPrice)
+    values (#{skuid,jdbcType=INTEGER}, #{skuname,jdbcType=VARCHAR}, #{skuprice,jdbcType=DECIMAL}, 
+      #{shopid,jdbcType=INTEGER}, #{stockcount,jdbcType=INTEGER}, #{commodityid,jdbcType=INTEGER}, 
+      #{specialprice,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.CommoditySku">
+    update m_commoditysku
+    set SKUName = #{skuname,jdbcType=VARCHAR},
+      SKUPrice = #{skuprice,jdbcType=DECIMAL},
+      ShopId = #{shopid,jdbcType=INTEGER},
+      StockCount = #{stockcount,jdbcType=INTEGER},
+      CommodityId = #{commodityid,jdbcType=INTEGER},
+      SpecialPrice = #{specialprice,jdbcType=DECIMAL}
+    where SKUId = #{skuid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select SKUId, SKUName, SKUPrice, ShopId, StockCount, CommodityId, SpecialPrice
+    from m_commoditysku
+    where SKUId = #{skuid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select SKUId, SKUName, SKUPrice, ShopId, StockCount, CommodityId, SpecialPrice
+    from m_commoditysku
+  </select>
+</mapper>

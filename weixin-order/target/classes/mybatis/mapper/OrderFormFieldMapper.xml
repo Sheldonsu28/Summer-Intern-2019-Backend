@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmm.weixin.dao.OrderFormFieldMapper">
+  <resultMap id="BaseResultMap" type="com.mmm.weixin.vo.OrderFormField">
+    <id column="FieldId" jdbcType="INTEGER" property="fieldid" />
+    <result column="FieldEnName" jdbcType="VARCHAR" property="fieldenname" />
+    <result column="FieldCnName" jdbcType="VARCHAR" property="fieldcnname" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="FieldType" jdbcType="VARCHAR" property="fieldtype" />
+    <result column="OrderFormType" jdbcType="INTEGER" property="orderformtype" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from m_orderformfield
+    where FieldId = #{fieldid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mmm.weixin.vo.OrderFormField">
+    insert into m_orderformfield (FieldId, FieldEnName, FieldCnName, 
+      Remark, FieldType, OrderFormType
+      )
+    values (#{fieldid,jdbcType=INTEGER}, #{fieldenname,jdbcType=VARCHAR}, #{fieldcnname,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{fieldtype,jdbcType=VARCHAR}, #{orderformtype,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.mmm.weixin.vo.OrderFormField">
+    update m_orderformfield
+    set FieldEnName = #{fieldenname,jdbcType=VARCHAR},
+      FieldCnName = #{fieldcnname,jdbcType=VARCHAR},
+      Remark = #{remark,jdbcType=VARCHAR},
+      FieldType = #{fieldtype,jdbcType=VARCHAR},
+      OrderFormType = #{orderformtype,jdbcType=INTEGER}
+    where FieldId = #{fieldid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select FieldId, FieldEnName, FieldCnName, Remark, FieldType, OrderFormType
+    from m_orderformfield
+    where FieldId = #{fieldid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select FieldId, FieldEnName, FieldCnName, Remark, FieldType, OrderFormType
+    from m_orderformfield
+  </select>
+  <sql id="Base_Column">FieldId, FieldEnName, FieldCnName, Remark, FieldType, OrderFormType</sql>
+  <select id="selectByOderType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column"/>
+  	from m_orderformfield
+  	where OrderFormType = #{orderFormType}
+  </select>
+  <select id="selectByCondition" parameterType="OrderFormFieldParamDto" resultMap="BaseResultMap">
+    select <include refid="Base_Column"/>
+  	from m_orderformfield
+  	<where>
+  		<if test="orderFormType != null and orderFormType != 0 ">
+		  	and OrderFormType = #{orderFormType}  		
+  		</if>
+  		<if test="fieldName != null and fieldName != ''">
+  			and FieldEnName = #{fieldName}
+  		</if>
+  	</where>
+  </select>
+</mapper>
